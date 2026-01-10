@@ -18,10 +18,30 @@ const ibmPlexMono = IBM_Plex_Mono({
 const bebasNeue = Bebas_Neue({ weight: "400", subsets: ["latin"], variable: "--font-bebas" })
 
 export const metadata: Metadata = {
-  title: "SIGNAL — Experimental Creative Studio",
+  title: "MRO.ai — AI-Powered Sourcing for Maintenance Teams",
   description:
-    "Interface studies in controlled environments. We design systems that behave, not just screens that display.",
-  generator: "v0.app",
+    "Send a request any way you want — photo, text, email, or kiosk. Get structured RFQs, vendor matches, and parsed quotes automatically. Faster quotes. Fewer errors. Less downtime.",
+  generator: "MRO.ai",
+  keywords: ["MRO", "maintenance", "sourcing", "RFQ", "procurement", "AI", "parts sourcing", "industrial"],
+  authors: [{ name: "MRO.ai" }],
+  
+  // Open Graph (Facebook, LinkedIn, iMessage, Slack, etc.)
+  openGraph: {
+    title: "MRO.ai — AI-Powered Sourcing for Maintenance Teams",
+    description: "Photo. Text. Email. Kiosk. We handle the rest. AI-powered sourcing that gets you quotes faster with less back-and-forth.",
+    url: "https://mro-command-website.vercel.app",
+    siteName: "MRO.ai",
+    type: "website",
+    locale: "en_US",
+  },
+  
+  // Twitter Card
+  twitter: {
+    card: "summary_large_image",
+    title: "MRO.ai — AI-Powered Sourcing for Maintenance Teams",
+    description: "Photo. Text. Email. Kiosk. We handle the rest. Get quotes faster with less back-and-forth.",
+  },
+  
   icons: {
     icon: [
       {
