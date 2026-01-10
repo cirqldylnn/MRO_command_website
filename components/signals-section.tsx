@@ -525,10 +525,10 @@ export function SignalsSection() {
       <div ref={headerRef} className="mb-16 pr-6 md:pr-12 max-w-4xl">
         <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">01 / Ways to Request</span>
         <h2 className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight">
-          MEET THEM WHERE THEY ARE.
+          WE MEET YOU WHERE YOU ALREADY ARE.
         </h2>
         <p className="mt-6 font-mono text-sm text-muted-foreground leading-relaxed max-w-2xl">
-          A request can start from the floor, the inbox, or the dashboard — the system stays the same. 
+          Start requests from the floor, your inbox, or the dashboard — the system stays the same. 
           <span className="text-accent"> No app downloads. No training. No friction.</span>
         </p>
         
