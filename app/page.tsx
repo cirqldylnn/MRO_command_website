@@ -1,6 +1,7 @@
 import { HeroSection } from "@/components/hero-section"
 import { SignalsSection } from "@/components/signals-section"
 import { WorkSection } from "@/components/work-section"
+import { ProjectModeSection } from "@/components/project-mode-section"
 import { ScenariosSection } from "@/components/scenarios-section"
 import { PrinciplesSection } from "@/components/principles-section"
 import { EquipmentSection } from "@/components/equipment-section"
@@ -21,6 +22,7 @@ export default function Page() {
         <HeroSection />
         <SignalsSection />
         <WorkSection />
+        <ProjectModeSection />
         <ScenariosSection />
         <PrinciplesSection />
         <EquipmentSection />
