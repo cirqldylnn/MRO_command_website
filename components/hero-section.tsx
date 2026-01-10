@@ -61,7 +61,7 @@ export function HeroSection() {
       {/* Left vertical label */}
       <div className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2">
         <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground -rotate-90 origin-left block whitespace-nowrap">
-          MRO.AI
+          MRO COMMAND
         </span>
       </div>
 

@@ -18,19 +18,19 @@ const ibmPlexMono = IBM_Plex_Mono({
 const bebasNeue = Bebas_Neue({ weight: "400", subsets: ["latin"], variable: "--font-bebas" })
 
 export const metadata: Metadata = {
-  title: "MRO.ai — AI-Powered Sourcing for Maintenance Teams",
+  title: "MRO Command — AI-Powered Sourcing for Maintenance Teams",
   description:
     "Send a request any way you want — photo, text, email, or kiosk. Get structured RFQs, vendor matches, and parsed quotes automatically. Faster quotes. Fewer errors. Less downtime.",
-  generator: "MRO.ai",
-  keywords: ["MRO", "maintenance", "sourcing", "RFQ", "procurement", "AI", "parts sourcing", "industrial"],
-  authors: [{ name: "MRO.ai" }],
+  generator: "MRO Command",
+  keywords: ["MRO", "maintenance", "sourcing", "RFQ", "procurement", "AI", "parts sourcing", "industrial", "MRO Command"],
+  authors: [{ name: "MRO Command" }],
   
   // Open Graph (Facebook, LinkedIn, iMessage, Slack, etc.)
   openGraph: {
-    title: "MRO.ai — AI-Powered Sourcing for Maintenance Teams",
+    title: "MRO Command — AI-Powered Sourcing for Maintenance Teams",
     description: "Photo. Text. Email. Kiosk. We handle the rest. AI-powered sourcing that gets you quotes faster with less back-and-forth.",
-    url: "https://mro-command-website.vercel.app",
-    siteName: "MRO.ai",
+    url: "https://mrocommand.com",
+    siteName: "MRO Command",
     type: "website",
     locale: "en_US",
   },
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   // Twitter Card
   twitter: {
     card: "summary_large_image",
-    title: "MRO.ai — AI-Powered Sourcing for Maintenance Teams",
+    title: "MRO Command — AI-Powered Sourcing for Maintenance Teams",
     description: "Photo. Text. Email. Kiosk. We handle the rest. Get quotes faster with less back-and-forth.",
   },
   
