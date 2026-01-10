@@ -94,12 +94,12 @@ export function HeroSection() {
         </SplitFlapAudioProvider>
 
         <h2 className="font-[var(--font-bebas)] text-muted-foreground/60 text-[clamp(1.1rem,3vw,2.5rem)] mt-4 sm:mt-6 tracking-wide leading-tight sm:leading-normal">
-          Photo. Text. Email. Kiosk. <span className="text-accent">We handle the rest.</span>
+          Stop chasing vendors for a $40 gasket. <span className="text-accent">Start closing orders.</span>
         </h2>
 
         <p className="mt-6 sm:mt-8 max-w-lg font-mono text-xs sm:text-sm text-muted-foreground leading-relaxed">
-          AI-powered sourcing for maintenance teams that can't wait. 
-          Send a request any way you want — get structured RFQs, vendor matches, and parsed quotes automatically.
+          Photo. Text. Email. Kiosk — send a request any way you want. 
+          MRO Command turns it into structured RFQs, matches vendors, and gets you quotes automatically.
         </p>
 
         <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
