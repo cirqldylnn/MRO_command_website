@@ -6,7 +6,7 @@ import { WorkSection } from "@/components/work-section"
 import { ProjectModeSection } from "@/components/project-mode-section"
 import { ScenariosSection } from "@/components/scenarios-section"
 import { PrinciplesSection } from "@/components/principles-section"
-import { EquipmentSection } from "@/components/equipment-section"
+import { InventorySection } from "@/components/inventory-section"
 import { AdoptionSection } from "@/components/adoption-section"
 import { KioskSection } from "@/components/kiosk-section"
 import { ColophonSection } from "@/components/colophon-section"
@@ -29,7 +29,7 @@ export default function Page() {
         <ProjectModeSection />
         <ScenariosSection />
         <PrinciplesSection />
-        <EquipmentSection />
+        <InventorySection />
         <AdoptionSection />
         <KioskSection />
         <ColophonSection />
