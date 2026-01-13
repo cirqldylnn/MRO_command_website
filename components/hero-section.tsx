@@ -67,6 +67,13 @@ export function HeroSection() {
 
       {/* Main content */}
       <div ref={contentRef} className="flex-1 w-full">
+        {/* What it is - one liner */}
+        <div className="mb-6 sm:mb-8">
+          <span className="inline-block font-mono text-[10px] sm:text-xs text-muted-foreground/80 uppercase tracking-widest">
+            AI-powered MRO procurement — capture requests, structure RFQs, close orders automatically.
+          </span>
+        </div>
+
         <SplitFlapAudioProvider>
           <div className="relative">
             {/* Cycling split-flap text - with overflow protection for mobile */}
@@ -102,6 +109,13 @@ export function HeroSection() {
           MRO Command turns it into structured RFQs, matches vendors, and gets you quotes automatically.
         </p>
 
+        {/* Who it's for */}
+        <div className="mt-4 sm:mt-5">
+          <span className="font-mono text-[10px] sm:text-xs text-accent/80">
+            Built for maintenance teams, procurement, and plant operations.
+          </span>
+        </div>
+
         <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
           <a
             href="#cta"
@@ -121,8 +135,24 @@ export function HeroSection() {
           </a>
         </div>
 
-        {/* Trust badges */}
-        <div className="mt-8 sm:mt-12 flex flex-wrap items-center gap-4 sm:gap-6 text-muted-foreground/60">
+        {/* Stats bar */}
+        <div className="mt-8 sm:mt-12 grid grid-cols-3 gap-4 sm:gap-8 max-w-xl">
+          <div className="border-l-2 border-accent/50 pl-3 sm:pl-4">
+            <div className="font-[var(--font-bebas)] text-2xl sm:text-3xl text-accent">60%</div>
+            <div className="font-mono text-[9px] sm:text-[10px] text-muted-foreground uppercase tracking-wider">Faster RFQs</div>
+          </div>
+          <div className="border-l-2 border-accent/50 pl-3 sm:pl-4">
+            <div className="font-[var(--font-bebas)] text-2xl sm:text-3xl text-accent">4×</div>
+            <div className="font-mono text-[9px] sm:text-[10px] text-muted-foreground uppercase tracking-wider">Response Rate</div>
+          </div>
+          <div className="border-l-2 border-accent/50 pl-3 sm:pl-4">
+            <div className="font-[var(--font-bebas)] text-2xl sm:text-3xl text-accent">$0</div>
+            <div className="font-mono text-[9px] sm:text-[10px] text-muted-foreground uppercase tracking-wider">Rush Fees</div>
+          </div>
+        </div>
+
+        {/* Trust signals */}
+        <div className="mt-6 sm:mt-8 flex flex-wrap items-center gap-4 sm:gap-6 text-muted-foreground/60">
           <div className="flex items-center gap-1.5 sm:gap-2">
             <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
