@@ -4,19 +4,24 @@ import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 
 const navItems = [
+  // Act 1: Problem & Promise
   { id: "hero", label: "Index" },
   { id: "problem", label: "Problem" },
+  // Act 2: How It Works
+  { id: "work", label: "Process" },
   { id: "signals", label: "Request" },
   { id: "agent", label: "Agent" },
-  { id: "work", label: "Modules" },
-  { id: "projects", label: "Projects" },
-  { id: "scenarios", label: "Scenarios" },
-  { id: "principles", label: "Process" },
+  { id: "principles", label: "Trust" },
+  // Act 3: Capabilities
   { id: "inventory", label: "Inventory" },
-  { id: "adoption", label: "Adoption" },
+  { id: "projects", label: "Projects" },
   { id: "kiosk", label: "Kiosk" },
+  // Act 4: Proof & Trust
+  { id: "adoption", label: "Adoption" },
+  { id: "scenarios", label: "Scenarios" },
   { id: "colophon", label: "Security" },
   { id: "roi", label: "Results" },
+  // Act 5: Action
   { id: "cta", label: "Contact" },
 ]
 

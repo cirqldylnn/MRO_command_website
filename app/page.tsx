@@ -21,19 +21,28 @@ export default function Page() {
       <div className="grid-bg fixed inset-0 opacity-30" aria-hidden="true" />
 
       <div className="relative z-10">
+        {/* Act 1: Problem & Promise */}
         <HeroSection />
         <PainSection />
+        
+        {/* Act 2: How It Works */}
+        <WorkSection />
         <SignalsSection />
         <FloorAgentSection />
-        <WorkSection />
-        <ProjectModeSection />
-        <ScenariosSection />
         <PrinciplesSection />
+        
+        {/* Act 3: Capabilities */}
         <InventorySection />
-        <AdoptionSection />
+        <ProjectModeSection />
         <KioskSection />
+        
+        {/* Act 4: Proof & Trust */}
+        <AdoptionSection />
+        <ScenariosSection />
         <ColophonSection />
         <ROISection />
+        
+        {/* Act 5: Action */}
         <CTASection />
       </div>
     </main>
