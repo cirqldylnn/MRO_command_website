@@ -146,8 +146,8 @@ export function HeroSection() {
             <div className="font-mono text-[9px] sm:text-[10px] text-muted-foreground uppercase tracking-wider">Response Rate</div>
           </div>
           <div className="border-l-2 border-accent/50 pl-3 sm:pl-4">
-            <div className="font-[var(--font-bebas)] text-2xl sm:text-3xl text-accent">$0</div>
-            <div className="font-mono text-[9px] sm:text-[10px] text-muted-foreground uppercase tracking-wider">Rush Fees</div>
+            <div className="font-[var(--font-bebas)] text-2xl sm:text-3xl text-accent">3+</div>
+            <div className="font-mono text-[9px] sm:text-[10px] text-muted-foreground uppercase tracking-wider">Quotes Always</div>
           </div>
         </div>
 

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useRef, useEffect } from "react"
+import React, { useRef, useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -75,8 +75,18 @@ const featureIcons: Record<string, () => React.ReactElement> = {
   support: SupportIcon,
 }
 
-// Kiosk UI Mockup Component
+// Kiosk UI Mockup Component with cycling screens
 function KioskMockup() {
+  const [currentScreen, setCurrentScreen] = useState(0)
+  
+  // Cycle through screens
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentScreen((prev) => (prev + 1) % 3)
+    }, 4000)
+    return () => clearInterval(timer)
+  }, [])
+
   return (
     <div className="relative">
       {/* Kiosk frame - wall mounted look */}
@@ -101,87 +111,146 @@ function KioskMockup() {
             </div>
           </div>
           
-          {/* Screen content */}
-          <div className="bg-zinc-950 p-6 md:p-8">
-            {/* Header */}
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center gap-2 bg-accent/10 border border-accent/30 rounded-full px-4 py-1.5 mb-4">
-                <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-                <span className="font-mono text-xs text-accent">MRO ASSIST READY</span>
+          {/* Screen content - cycling */}
+          <div className="bg-zinc-950 p-6 md:p-8 min-h-[420px] relative overflow-hidden">
+            {/* Screen 0: Home */}
+            <div className={cn(
+              "absolute inset-6 md:inset-8 transition-all duration-500",
+              currentScreen === 0 ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
+            )}>
+              {/* Header */}
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center gap-2 bg-accent/10 border border-accent/30 rounded-full px-4 py-1.5 mb-4">
+                  <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+                  <span className="font-mono text-xs text-accent">MRO ASSIST READY</span>
+                </div>
+                <h3 className="font-[var(--font-bebas)] text-2xl md:text-3xl text-white tracking-tight">
+                  How can we help?
+                </h3>
               </div>
-              <h3 className="font-[var(--font-bebas)] text-2xl md:text-3xl text-white tracking-tight">
-                How can we help?
+              
+              {/* Main action buttons */}
+              <div className="space-y-4">
+                <div className="w-full bg-accent text-black rounded-lg p-5 md:p-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-black/20 flex items-center justify-center">
+                      <svg className="w-7 h-7 md:w-8 md:h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                      </svg>
+                    </div>
+                    <div className="text-left">
+                      <div className="font-[var(--font-bebas)] text-xl md:text-2xl tracking-tight">Create Request</div>
+                      <div className="text-sm opacity-80">Photo, voice, or text</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg p-5 md:p-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-zinc-900 border border-zinc-700 flex items-center justify-center">
+                      <svg className="w-7 h-7 md:w-8 md:h-8 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2" />
+                      </svg>
+                    </div>
+                    <div className="text-left">
+                      <div className="font-[var(--font-bebas)] text-xl md:text-2xl tracking-tight">Scan Equipment QR</div>
+                      <div className="text-sm text-zinc-400">Link request to asset</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Screen 1: Creating Request */}
+            <div className={cn(
+              "absolute inset-6 md:inset-8 transition-all duration-500",
+              currentScreen === 1 ? "opacity-100 translate-x-0" : currentScreen === 0 ? "opacity-0 translate-x-8" : "opacity-0 -translate-x-8"
+            )}>
+              <div className="text-center mb-6">
+                <span className="font-mono text-xs text-zinc-500 uppercase tracking-wider">New Request</span>
+                <h3 className="font-[var(--font-bebas)] text-2xl text-white tracking-tight mt-2">
+                  Describe the issue
+                </h3>
+              </div>
+              
+              {/* Voice recording indicator */}
+              <div className="bg-zinc-900 border border-zinc-700 rounded-xl p-6 mb-4">
+                <div className="flex items-center justify-center gap-4 mb-4">
+                  <div className="w-16 h-16 rounded-full bg-red-500/20 border-2 border-red-500 flex items-center justify-center animate-pulse">
+                    <svg className="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                      <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                    </svg>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="font-mono text-sm text-red-400 mb-1">Recording...</div>
+                  <div className="font-mono text-xs text-zinc-500">"The pump on line 4 is making a grinding noise..."</div>
+                </div>
+                {/* Audio waveform */}
+                <div className="flex items-center justify-center gap-1 mt-4">
+                  {[...Array(12)].map((_, i) => (
+                    <div 
+                      key={i} 
+                      className="w-1 bg-accent rounded-full animate-pulse"
+                      style={{ 
+                        height: `${Math.random() * 24 + 8}px`,
+                        animationDelay: `${i * 100}ms`
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <button className="flex-1 bg-zinc-800 border border-zinc-700 rounded-lg py-3 font-mono text-xs text-zinc-400">
+                  Cancel
+                </button>
+                <button className="flex-1 bg-accent text-black rounded-lg py-3 font-mono text-xs font-bold">
+                  Submit Request
+                </button>
+              </div>
+            </div>
+
+            {/* Screen 2: Confirmation */}
+            <div className={cn(
+              "absolute inset-6 md:inset-8 transition-all duration-500 flex flex-col items-center justify-center",
+              currentScreen === 2 ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
+            )}>
+              <div className="w-20 h-20 rounded-full bg-emerald-500/20 border-2 border-emerald-500 flex items-center justify-center mb-6">
+                <svg className="w-10 h-10 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h3 className="font-[var(--font-bebas)] text-2xl text-white tracking-tight mb-2">
+                Request Submitted
               </h3>
-            </div>
-            
-            {/* Main action buttons */}
-            <div className="space-y-4">
-              {/* Create Request */}
-              <button className="w-full group relative bg-accent hover:bg-accent/90 text-black rounded-lg p-5 md:p-6 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-black/20 flex items-center justify-center">
-                    <svg className="w-7 h-7 md:w-8 md:h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                    </svg>
-                  </div>
-                  <div className="text-left">
-                    <div className="font-[var(--font-bebas)] text-xl md:text-2xl tracking-tight">Create Request</div>
-                    <div className="text-sm opacity-80">Photo, voice, or text</div>
-                  </div>
+              <p className="font-mono text-sm text-zinc-400 text-center mb-6">
+                RFQ #4421 created and sent to 4 vendors
+              </p>
+              <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 w-full max-w-xs">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-mono text-xs text-zinc-500">Expected quotes</span>
+                  <span className="font-mono text-xs text-accent">2-4 hours</span>
                 </div>
-                <svg className="absolute right-5 top-1/2 -translate-y-1/2 w-6 h-6 opacity-60 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-              
-              {/* Scan Equipment QR */}
-              <button className="w-full group relative bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700 hover:border-zinc-600 rounded-lg p-5 md:p-6 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-zinc-900 border border-zinc-700 flex items-center justify-center">
-                    <svg className="w-7 h-7 md:w-8 md:h-8 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2M7 8h.01M7 12h.01M7 16h.01M11 8h.01M11 12h.01M11 16h.01M15 8h.01M15 12h.01M15 16h.01" />
-                    </svg>
-                  </div>
-                  <div className="text-left">
-                    <div className="font-[var(--font-bebas)] text-xl md:text-2xl tracking-tight">Scan Equipment QR</div>
-                    <div className="text-sm text-zinc-400">Link request to asset</div>
-                  </div>
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-xs text-zinc-500">Notification</span>
+                  <span className="font-mono text-xs text-zinc-300">SMS + Email</span>
                 </div>
-                <svg className="absolute right-5 top-1/2 -translate-y-1/2 w-6 h-6 text-zinc-500 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-              
-              {/* Talk to Live Person */}
-              <button className="w-full group relative bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700 hover:border-zinc-600 rounded-lg p-5 md:p-6 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-zinc-900 border border-zinc-700 flex items-center justify-center relative">
-                    <svg className="w-7 h-7 md:w-8 md:h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                    </svg>
-                    {/* Live indicator */}
-                    <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-500 border-2 border-zinc-900 animate-pulse" />
-                  </div>
-                  <div className="text-left">
-                    <div className="font-[var(--font-bebas)] text-xl md:text-2xl tracking-tight">Talk to a Live Person</div>
-                    <div className="text-sm text-zinc-400">Urgent or complex requests</div>
-                  </div>
-                </div>
-                <svg className="absolute right-5 top-1/2 -translate-y-1/2 w-6 h-6 text-zinc-500 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-            
-            {/* Bottom status bar */}
-            <div className="mt-8 pt-4 border-t border-zinc-800 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <svg className="w-4 h-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0" />
-                </svg>
-                <span className="font-mono text-[10px] text-zinc-500">LTE Connected</span>
               </div>
-              <div className="font-mono text-[10px] text-zinc-600">v2.4.1</div>
+            </div>
+
+            {/* Screen indicators */}
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
+              {[0, 1, 2].map((i) => (
+                <div 
+                  key={i}
+                  className={cn(
+                    "h-1 rounded-full transition-all duration-300",
+                    currentScreen === i ? "w-6 bg-accent" : "w-2 bg-zinc-700"
+                  )}
+                />
+              ))}
             </div>
           </div>
           
@@ -299,10 +368,44 @@ export function KioskSection() {
         {/* Section header */}
         <div ref={headerRef} className="mb-16 md:mb-20">
           <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">04 / Hardware</span>
-          <h2 className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight">THE KIOSK</h2>
-          <p className="mt-6 font-[var(--font-bebas)] text-2xl md:text-4xl text-muted-foreground tracking-tight max-w-2xl">
+          
+          {/* Pain hook */}
+          <p className="mt-4 font-mono text-sm text-red-400/80 italic">
+            Your team shouldn't need a laptop to place an order.
+          </p>
+          
+          <h2 className="mt-3 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight">THE KIOSK</h2>
+          <p className="mt-4 font-[var(--font-bebas)] text-2xl md:text-4xl text-muted-foreground tracking-tight max-w-2xl">
             A sourcing desk that lives on the floor.
           </p>
+
+          {/* Specs strip */}
+          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-muted-foreground/60">
+            <div className="flex items-center gap-2">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
+              </svg>
+              <span className="font-mono text-[10px] uppercase tracking-wider">43" Display</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                <path d="M2 20h.01M7 20v-4M12 20v-8M17 20V8M22 20V4" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span className="font-mono text-[10px] uppercase tracking-wider">LTE Built-in</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10.05 4.575a1.575 1.575 0 10-3.15 0v3m3.15-3v-1.5a1.575 1.575 0 013.15 0v1.5m-3.15 0l.075 5.925m3.075.75V4.575m0 0a1.575 1.575 0 013.15 0V15M6.9 7.575a1.575 1.575 0 10-3.15 0v8.175a6.75 6.75 0 006.75 6.75h2.018a5.25 5.25 0 003.712-1.538l1.732-1.732a5.25 5.25 0 001.538-3.712l.003-2.024a.668.668 0 01.198-.471 1.575 1.575 0 10-2.228-2.228 3.818 3.818 0 00-1.12 2.687M6.9 7.575V12m6.27 4.318V4.575" />
+              </svg>
+              <span className="font-mono text-[10px] uppercase tracking-wider">Glove-Friendly</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+              </svg>
+              <span className="font-mono text-[10px] uppercase tracking-wider">Wall or Stand</span>
+            </div>
+          </div>
         </div>
 
         {/* Main content grid */}
@@ -362,10 +465,10 @@ export function KioskSection() {
               </div>
               <div className="flex-shrink-0">
                 <a
-                  href="#colophon"
+                  href="#cta"
                   className="inline-flex items-center gap-2 bg-accent text-black font-mono text-sm font-bold px-6 py-3 rounded-lg hover:bg-accent/90 transition-colors duration-200"
                 >
-                  Get in Touch
+                  See If You Qualify
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
