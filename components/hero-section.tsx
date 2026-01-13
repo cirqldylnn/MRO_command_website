@@ -58,6 +58,21 @@ export function HeroSection() {
     <section ref={sectionRef} id="hero" className="relative min-h-screen flex items-center pl-6 md:pl-28 pr-6 md:pr-12">
       <AnimatedNoise opacity={0.03} />
 
+      {/* Login button - top right */}
+      <div className="absolute top-6 right-6 md:top-8 md:right-8 z-20">
+        <a
+          href="https://app.mrocommand.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group inline-flex items-center gap-2 border border-foreground/20 hover:border-accent px-4 py-2 font-mono text-[10px] sm:text-xs uppercase tracking-widest text-foreground hover:text-accent bg-background/80 backdrop-blur-sm transition-all duration-200"
+        >
+          <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+          </svg>
+          Log In
+        </a>
+      </div>
+
       {/* Left vertical label */}
       <div className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2">
         <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground -rotate-90 origin-left block whitespace-nowrap">
