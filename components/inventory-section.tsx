@@ -11,6 +11,7 @@ const features = [
   {
     id: "ai-import",
     title: "AI-Powered Import",
+    pain: "Tired of manual data entry?",
     description: "Snap a photo of any part. AI extracts specs, finds suppliers, catalogs it instantly.",
     icon: "camera",
     color: "cyan",
@@ -18,6 +19,7 @@ const features = [
   {
     id: "tracking",
     title: "Smart Stock Tracking",
+    pain: "Surprise stockouts?",
     description: "Real-time quantities, bin locations, and automatic reorder alerts when you're running low.",
     icon: "chart",
     color: "emerald",
@@ -25,6 +27,7 @@ const features = [
   {
     id: "linking",
     title: "Parts ↔ Equipment",
+    pain: "Wrong part, wasted trip?",
     description: "Every part knows which machines it fits. Every machine knows its parts.",
     icon: "link",
     color: "amber",
@@ -32,6 +35,7 @@ const features = [
   {
     id: "analytics",
     title: "Usage Analytics",
+    pain: "Emergency orders killing budget?",
     description: "Track consumption patterns. Predict needs. Stop emergency orders.",
     icon: "analytics",
     color: "violet",
@@ -387,6 +391,9 @@ export function InventorySection() {
                       <Icon className="w-5 h-5" />
                     </div>
                     <div className="flex-1">
+                      <div className="font-mono text-[10px] text-red-400/80 mb-1 italic">
+                        {feature.pain}
+                      </div>
                       <div className={cn("font-[var(--font-bebas)] text-lg tracking-tight", colors.text)}>
                         {feature.title}
                       </div>
