@@ -75,7 +75,7 @@ const featureIcons: Record<string, () => React.ReactElement> = {
   support: SupportIcon,
 }
 
-// Kiosk UI Mockup Component with cycling screens
+// Kiosk UI Mockup Component - Vertical Freestanding
 function KioskMockup() {
   const [currentScreen, setCurrentScreen] = useState(0)
   
@@ -83,171 +83,258 @@ function KioskMockup() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentScreen((prev) => (prev + 1) % 3)
-    }, 4000)
+    }, 5000)
     return () => clearInterval(timer)
   }, [])
 
   return (
-    <div className="relative">
-      {/* Kiosk frame - wall mounted look */}
-      <div className="relative mx-auto max-w-md">
-        {/* Mount bracket hint */}
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-3 bg-zinc-700 rounded-t-sm" />
+    <div className="relative flex flex-col items-center">
+      {/* Kiosk frame - vertical freestanding */}
+      <div className="relative w-[280px] md:w-[320px]">
         
-        {/* Main kiosk body */}
-        <div className="relative bg-zinc-800 rounded-lg border-4 border-zinc-700 shadow-2xl shadow-black/50 overflow-hidden">
+        {/* Main kiosk body - taller/vertical aspect */}
+        <div className="relative bg-zinc-800 rounded-2xl border-4 border-zinc-700 shadow-2xl shadow-black/50 overflow-hidden">
           {/* Top bezel with camera/mic */}
-          <div className="bg-zinc-900 px-4 py-2 flex items-center justify-between border-b border-zinc-700">
+          <div className="bg-zinc-900 px-4 py-3 flex items-center justify-between border-b border-zinc-700">
             <div className="flex items-center gap-2">
-              {/* Camera */}
-              <div className="w-2 h-2 rounded-full bg-zinc-600 ring-1 ring-zinc-500" />
-              {/* Mic */}
-              <div className="w-1.5 h-3 rounded-full bg-zinc-600" />
+              <div className="w-2.5 h-2.5 rounded-full bg-zinc-600 ring-1 ring-zinc-500" />
+              <div className="w-1.5 h-4 rounded-full bg-zinc-600" />
             </div>
-            {/* Status indicator */}
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="font-mono text-[10px] text-emerald-400 uppercase tracking-wider">Online</span>
+              <span className="font-mono text-[9px] text-emerald-400 uppercase tracking-wider">Online</span>
             </div>
           </div>
           
           {/* Screen content - cycling */}
-          <div className="bg-zinc-950 p-6 md:p-8 min-h-[420px] relative overflow-hidden">
-            {/* Screen 0: Home */}
+          <div className="bg-zinc-950 min-h-[480px] relative overflow-hidden">
+            
+            {/* Screen 0: Order Updates Dashboard */}
             <div className={cn(
-              "absolute inset-6 md:inset-8 transition-all duration-500",
-              currentScreen === 0 ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
+              "absolute inset-0 p-4 transition-all duration-500",
+              currentScreen === 0 ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-full"
             )}>
               {/* Header */}
-              <div className="text-center mb-8">
-                <div className="inline-flex items-center gap-2 bg-accent/10 border border-accent/30 rounded-full px-4 py-1.5 mb-4">
-                  <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-                  <span className="font-mono text-xs text-accent">MRO ASSIST READY</span>
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <div className="font-mono text-[9px] text-zinc-500 uppercase">Welcome back</div>
+                  <div className="font-[var(--font-bebas)] text-lg text-white">Mike T.</div>
                 </div>
-                <h3 className="font-[var(--font-bebas)] text-2xl md:text-3xl text-white tracking-tight">
-                  How can we help?
-                </h3>
+                <div className="flex items-center gap-1 bg-accent/10 border border-accent/30 rounded-full px-2 py-1">
+                  <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                  <span className="font-mono text-[8px] text-accent">3 UPDATES</span>
+                </div>
               </div>
-              
-              {/* Main action buttons */}
-              <div className="space-y-4">
-                <div className="w-full bg-accent text-black rounded-lg p-5 md:p-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-black/20 flex items-center justify-center">
-                      <svg className="w-7 h-7 md:w-8 md:h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                      </svg>
+
+              {/* Active Orders */}
+              <div className="mb-4">
+                <div className="font-mono text-[9px] text-zinc-500 uppercase mb-2">Active Orders</div>
+                <div className="space-y-2">
+                  {/* Order 1 - Quotes received */}
+                  <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-3">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-mono text-[10px] text-emerald-400 font-medium">RFQ #4418</span>
+                      <span className="font-mono text-[8px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded">3 QUOTES</span>
                     </div>
-                    <div className="text-left">
-                      <div className="font-[var(--font-bebas)] text-xl md:text-2xl tracking-tight">Create Request</div>
-                      <div className="text-sm opacity-80">Photo, voice, or text</div>
+                    <div className="font-mono text-xs text-white mb-1">Vacuum Pump Rebuild Kit</div>
+                    <div className="font-mono text-[9px] text-zinc-500">Ready for review →</div>
+                  </div>
+                  
+                  {/* Order 2 - In transit */}
+                  <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-3">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-mono text-[10px] text-zinc-400">PO #8821</span>
+                      <span className="font-mono text-[8px] bg-cyan-500/20 text-cyan-400 px-1.5 py-0.5 rounded">IN TRANSIT</span>
                     </div>
+                    <div className="font-mono text-xs text-white mb-1">Bearing SKF 6205-2RS (x4)</div>
+                    <div className="font-mono text-[9px] text-zinc-500">Arrives tomorrow, 2pm</div>
+                  </div>
+
+                  {/* Order 3 - Pending */}
+                  <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-3">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-mono text-[10px] text-zinc-400">RFQ #4420</span>
+                      <span className="font-mono text-[8px] bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded">PENDING</span>
+                    </div>
+                    <div className="font-mono text-xs text-white mb-1">Motor Coupling L-100</div>
+                    <div className="font-mono text-[9px] text-zinc-500">Sent to 4 vendors</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Actions */}
+              <div className="grid grid-cols-2 gap-2">
+                <button className="bg-accent text-black rounded-lg p-3 text-center">
+                  <svg className="w-5 h-5 mx-auto mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                  </svg>
+                  <span className="font-mono text-[9px] font-bold">New Request</span>
+                </button>
+                <button className="bg-zinc-800 border border-zinc-700 text-white rounded-lg p-3 text-center">
+                  <svg className="w-5 h-5 mx-auto mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5z" />
+                  </svg>
+                  <span className="font-mono text-[9px]">Scan QR</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Screen 1: Parts Diagram View */}
+            <div className={cn(
+              "absolute inset-0 p-4 transition-all duration-500",
+              currentScreen === 1 ? "opacity-100 translate-x-0" : currentScreen === 0 ? "opacity-0 translate-x-full" : "opacity-0 -translate-x-full"
+            )}>
+              {/* Header */}
+              <div className="flex items-center gap-2 mb-3">
+                <button className="w-8 h-8 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <div>
+                  <div className="font-mono text-[9px] text-zinc-500 uppercase">Equipment</div>
+                  <div className="font-[var(--font-bebas)] text-base text-white">Becker VTLF 2.250</div>
+                </div>
+              </div>
+
+              {/* Parts diagram placeholder */}
+              <div className="bg-zinc-900 border border-zinc-700 rounded-xl p-3 mb-3">
+                <div className="aspect-square bg-zinc-800 rounded-lg relative overflow-hidden mb-3">
+                  {/* Simplified pump diagram */}
+                  <svg className="w-full h-full p-4" viewBox="0 0 100 100" fill="none">
+                    {/* Pump body */}
+                    <rect x="20" y="30" width="60" height="40" rx="4" className="stroke-zinc-600" strokeWidth="1.5" fill="none" />
+                    {/* Inlet */}
+                    <rect x="10" y="42" width="12" height="16" rx="2" className="stroke-zinc-600" strokeWidth="1.5" fill="none" />
+                    {/* Outlet */}
+                    <rect x="78" y="42" width="12" height="16" rx="2" className="stroke-zinc-600" strokeWidth="1.5" fill="none" />
+                    {/* Motor */}
+                    <circle cx="50" cy="50" r="15" className="stroke-zinc-500" strokeWidth="1.5" fill="none" />
+                    <circle cx="50" cy="50" r="8" className="stroke-accent" strokeWidth="2" fill="none" />
+                    {/* Mounting */}
+                    <rect x="25" y="70" width="10" height="8" rx="1" className="fill-zinc-700" />
+                    <rect x="65" y="70" width="10" height="8" rx="1" className="fill-zinc-700" />
+                    {/* Highlight callout */}
+                    <circle cx="50" cy="50" r="20" className="stroke-accent/50" strokeWidth="1" strokeDasharray="4 2" fill="none" />
+                  </svg>
+                  {/* Part callout */}
+                  <div className="absolute top-2 right-2 bg-accent text-black font-mono text-[8px] font-bold px-1.5 py-0.5 rounded">
+                    TAP TO ZOOM
                   </div>
                 </div>
                 
-                <div className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg p-5 md:p-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-zinc-900 border border-zinc-700 flex items-center justify-center">
-                      <svg className="w-7 h-7 md:w-8 md:h-8 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2" />
-                      </svg>
-                    </div>
-                    <div className="text-left">
-                      <div className="font-[var(--font-bebas)] text-xl md:text-2xl tracking-tight">Scan Equipment QR</div>
-                      <div className="text-sm text-zinc-400">Link request to asset</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Screen 1: Creating Request */}
-            <div className={cn(
-              "absolute inset-6 md:inset-8 transition-all duration-500",
-              currentScreen === 1 ? "opacity-100 translate-x-0" : currentScreen === 0 ? "opacity-0 translate-x-8" : "opacity-0 -translate-x-8"
-            )}>
-              <div className="text-center mb-6">
-                <span className="font-mono text-xs text-zinc-500 uppercase tracking-wider">New Request</span>
-                <h3 className="font-[var(--font-bebas)] text-2xl text-white tracking-tight mt-2">
-                  Describe the issue
-                </h3>
-              </div>
-              
-              {/* Voice recording indicator */}
-              <div className="bg-zinc-900 border border-zinc-700 rounded-xl p-6 mb-4">
-                <div className="flex items-center justify-center gap-4 mb-4">
-                  <div className="w-16 h-16 rounded-full bg-red-500/20 border-2 border-red-500 flex items-center justify-center animate-pulse">
-                    <svg className="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
-                      <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
-                    </svg>
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="font-mono text-sm text-red-400 mb-1">Recording...</div>
-                  <div className="font-mono text-xs text-zinc-500">"The pump on line 4 is making a grinding noise..."</div>
-                </div>
-                {/* Audio waveform */}
-                <div className="flex items-center justify-center gap-1 mt-4">
-                  {[...Array(12)].map((_, i) => (
-                    <div 
-                      key={i} 
-                      className="w-1 bg-accent rounded-full animate-pulse"
-                      style={{ 
-                        height: `${Math.random() * 24 + 8}px`,
-                        animationDelay: `${i * 100}ms`
-                      }}
-                    />
-                  ))}
+                {/* Part info */}
+                <div className="font-mono text-[9px] text-zinc-500 uppercase mb-1">Selected Part</div>
+                <div className="font-mono text-sm text-white mb-1">Rotor Assembly</div>
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-[9px] text-zinc-500">Part #:</span>
+                  <span className="font-mono text-[9px] text-accent">BK-VTLF-ROT-250</span>
                 </div>
               </div>
 
-              <div className="flex gap-3">
-                <button className="flex-1 bg-zinc-800 border border-zinc-700 rounded-lg py-3 font-mono text-xs text-zinc-400">
-                  Cancel
+              {/* Actions */}
+              <div className="space-y-2">
+                <button className="w-full bg-accent text-black rounded-lg p-3 font-mono text-xs font-bold flex items-center justify-center gap-2">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                  </svg>
+                  Request This Part
                 </button>
-                <button className="flex-1 bg-accent text-black rounded-lg py-3 font-mono text-xs font-bold">
-                  Submit Request
+                <button className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg p-3 font-mono text-xs flex items-center justify-center gap-2">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                  </svg>
+                  View Full Manual
                 </button>
               </div>
             </div>
 
-            {/* Screen 2: Confirmation */}
+            {/* Screen 2: Quote Comparison */}
             <div className={cn(
-              "absolute inset-6 md:inset-8 transition-all duration-500 flex flex-col items-center justify-center",
-              currentScreen === 2 ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
+              "absolute inset-0 p-4 transition-all duration-500",
+              currentScreen === 2 ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full"
             )}>
-              <div className="w-20 h-20 rounded-full bg-emerald-500/20 border-2 border-emerald-500 flex items-center justify-center mb-6">
-                <svg className="w-10 h-10 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              {/* Header */}
+              <div className="flex items-center gap-2 mb-3">
+                <button className="w-8 h-8 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <div>
+                  <div className="font-mono text-[9px] text-zinc-500 uppercase">RFQ #4418</div>
+                  <div className="font-[var(--font-bebas)] text-base text-white">Compare Quotes</div>
+                </div>
+              </div>
+
+              {/* Part summary */}
+              <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-3 mb-3">
+                <div className="font-mono text-xs text-white mb-1">Vacuum Pump Rebuild Kit</div>
+                <div className="font-mono text-[9px] text-zinc-500">For: Becker VTLF 2.250 · Qty: 1</div>
+              </div>
+
+              {/* Quote cards */}
+              <div className="space-y-2 mb-3">
+                {/* Best quote */}
+                <div className="bg-emerald-500/10 border-2 border-emerald-500/50 rounded-lg p-3 relative">
+                  <div className="absolute -top-2 right-2 bg-emerald-500 text-black font-mono text-[7px] font-bold px-1.5 py-0.5 rounded">
+                    BEST VALUE
+                  </div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-mono text-[10px] text-white font-medium">Industrial Supply Co</span>
+                    <span className="font-[var(--font-bebas)] text-xl text-emerald-400">$847</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-[9px] font-mono text-zinc-400">
+                    <span>Ships: 2 days</span>
+                    <span>•</span>
+                    <span>In Stock</span>
+                  </div>
+                </div>
+
+                {/* Quote 2 */}
+                <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-mono text-[10px] text-white">MRO Direct</span>
+                    <span className="font-[var(--font-bebas)] text-xl text-white">$892</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-[9px] font-mono text-zinc-400">
+                    <span>Ships: 1 day</span>
+                    <span>•</span>
+                    <span>In Stock</span>
+                  </div>
+                </div>
+
+                {/* Quote 3 */}
+                <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-mono text-[10px] text-white">Grainger</span>
+                    <span className="font-[var(--font-bebas)] text-xl text-white">$923</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-[9px] font-mono text-zinc-400">
+                    <span>Ships: 3 days</span>
+                    <span>•</span>
+                    <span>In Stock</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Award button */}
+              <button className="w-full bg-accent text-black rounded-lg p-3 font-mono text-xs font-bold flex items-center justify-center gap-2">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-              </div>
-              <h3 className="font-[var(--font-bebas)] text-2xl text-white tracking-tight mb-2">
-                Request Submitted
-              </h3>
-              <p className="font-mono text-sm text-zinc-400 text-center mb-6">
-                RFQ #4421 created and sent to 4 vendors
-              </p>
-              <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-4 w-full max-w-xs">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-mono text-xs text-zinc-500">Expected quotes</span>
-                  <span className="font-mono text-xs text-accent">2-4 hours</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs text-zinc-500">Notification</span>
-                  <span className="font-mono text-xs text-zinc-300">SMS + Email</span>
-                </div>
-              </div>
+                Award to Industrial Supply
+              </button>
             </div>
 
             {/* Screen indicators */}
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
               {[0, 1, 2].map((i) => (
                 <div 
                   key={i}
                   className={cn(
-                    "h-1 rounded-full transition-all duration-300",
-                    currentScreen === i ? "w-6 bg-accent" : "w-2 bg-zinc-700"
+                    "h-1.5 rounded-full transition-all duration-300",
+                    currentScreen === i ? "w-6 bg-accent" : "w-1.5 bg-zinc-700"
                   )}
                 />
               ))}
@@ -255,11 +342,20 @@ function KioskMockup() {
           </div>
           
           {/* Bottom bezel */}
-          <div className="bg-zinc-900 h-3 border-t border-zinc-700" />
+          <div className="bg-zinc-900 h-4 border-t border-zinc-700" />
+        </div>
+
+        {/* Kiosk stand/pedestal */}
+        <div className="relative mx-auto">
+          {/* Neck */}
+          <div className="w-8 h-16 bg-gradient-to-b from-zinc-700 to-zinc-800 mx-auto" />
+          {/* Base */}
+          <div className="w-32 h-3 bg-zinc-700 rounded-full mx-auto" />
+          <div className="w-40 h-2 bg-zinc-800 rounded-full mx-auto mt-1 shadow-lg shadow-black/50" />
         </div>
         
         {/* Shadow/glow effect */}
-        <div className="absolute -inset-4 bg-accent/5 rounded-2xl blur-2xl -z-10" />
+        <div className="absolute -inset-8 bg-accent/5 rounded-3xl blur-3xl -z-10" />
       </div>
     </div>
   )
