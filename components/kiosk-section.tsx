@@ -475,6 +475,19 @@ export function KioskSection() {
             A sourcing desk that lives on the floor.
           </p>
 
+          {/* Try the Demo CTA */}
+          <div className="mt-6">
+            <a
+              href="/kiosk-demo"
+              className="inline-flex items-center gap-2 bg-zinc-800 border border-zinc-700 hover:border-accent px-4 py-2 font-mono text-xs uppercase tracking-widest text-foreground hover:text-accent transition-all duration-200"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+              </svg>
+              Try the Interactive Demo
+            </a>
+          </div>
+
           {/* Specs strip */}
           <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-muted-foreground/60">
             <div className="flex items-center gap-2">
