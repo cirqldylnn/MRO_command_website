@@ -547,7 +547,7 @@ export function KioskSection() {
           </div>
 
           {/* Right: Kiosk Mockup */}
-          <div ref={kioskRef}>
+          <div ref={kioskRef} className="-mt-8 md:-mt-12">
             <KioskMockup />
           </div>
         </div>
