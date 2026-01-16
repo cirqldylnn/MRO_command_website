@@ -11,9 +11,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 gsap.registerPlugin(ScrollTrigger)
 
 const heroTexts = [
-  { text: "SEND RFQ", duration: 4500 },
-  { text: "GET QUOTES", duration: 4500 },
-  { text: "FIND PARTS", duration: 4500 },
+  { text: "FIX MACHINES", duration: 4500 },
+  { text: "TRACK PARTS", duration: 4500 },
+  { text: "MANAGE PROJECTS", duration: 4500 },
 ]
 
 export function HeroSection() {
@@ -85,7 +85,7 @@ export function HeroSection() {
         {/* What it is - one liner */}
         <div className="mb-6 sm:mb-8">
           <span className="inline-block font-mono text-[10px] sm:text-xs text-muted-foreground/80 uppercase tracking-widest">
-            AI-powered MRO procurement — capture requests, structure RFQs, close orders automatically.
+            AI-powered MRO operations — troubleshoot at the machine, track inventory, source parts, manage projects. All in one system.
           </span>
         </div>
 
@@ -116,7 +116,7 @@ export function HeroSection() {
         </SplitFlapAudioProvider>
 
         <h2 className="font-[var(--font-bebas)] text-muted-foreground/60 text-[clamp(1.1rem,3vw,2.5rem)] mt-4 sm:mt-6 tracking-wide leading-tight sm:leading-normal">
-          Stop chasing vendors for a $40 gasket. <span className="text-accent">Start closing orders.</span>
+          MRO operations that work. <span className="text-accent">Troubleshoot, source, track, and close — automatically.</span>
         </h2>
 
         <p className="mt-6 sm:mt-8 max-w-lg font-mono text-xs sm:text-sm text-muted-foreground leading-relaxed">
