@@ -1,6 +1,7 @@
 import { HeroSection } from "@/components/hero-section"
 import { PainSection } from "@/components/pain-section"
 import { SignalsSection } from "@/components/signals-section"
+import { AgenticSmsSection } from "@/components/agentic-sms-section"
 import { FloorAgentSection } from "@/components/floor-agent-section"
 import { WorkSection } from "@/components/work-section"
 import { ProjectModeSection } from "@/components/project-mode-section"
@@ -29,6 +30,7 @@ export default function Page() {
         <WorkSection />
         <PrinciplesSection />
         <SignalsSection />
+        <AgenticSmsSection />
         <FloorAgentSection />
         
         {/* Act 3: Capabilities */}

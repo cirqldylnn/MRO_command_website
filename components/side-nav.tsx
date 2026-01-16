@@ -11,6 +11,7 @@ const navItems = [
   { id: "work", label: "Process" },
   { id: "principles", label: "Trust" },
   { id: "signals", label: "Request" },
+  { id: "agentic-sms", label: "SMS" },
   { id: "agent", label: "Agent" },
   // Act 3: Capabilities
   { id: "inventory", label: "Inventory" },
