@@ -174,7 +174,7 @@ export function HeroSection() {
 
         <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
           <a
-            href="#cta"
+            href="/demo"
             className="group inline-flex items-center gap-2 sm:gap-3 bg-accent text-black px-5 sm:px-6 py-2.5 sm:py-3 font-mono text-[10px] sm:text-xs uppercase tracking-widest font-bold hover:bg-accent/90 transition-all duration-200 w-full sm:w-auto justify-center sm:justify-start"
           >
             <ScrambleTextOnHover text="Book a Demo" as="span" duration={0.6} />

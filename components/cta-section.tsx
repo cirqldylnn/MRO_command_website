@@ -81,7 +81,7 @@ export function CTASection() {
         {/* CTA buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
           <a
-            href="#"
+            href="/demo"
             className="group inline-flex items-center gap-3 bg-accent text-black font-mono text-sm font-bold px-8 py-4 rounded-lg hover:bg-accent/90 transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-accent/25"
           >
             Book a Demo
@@ -91,7 +91,7 @@ export function CTASection() {
           </a>
           
           <a
-            href="#"
+            href="/demo?type=pilot"
             className="group inline-flex items-center gap-3 bg-transparent text-foreground font-mono text-sm font-bold px-8 py-4 rounded-lg border border-foreground/20 hover:border-accent hover:text-accent transition-all duration-200 hover:scale-105"
           >
             Start a Pilot
