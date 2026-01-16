@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
@@ -106,7 +106,7 @@ const colorClasses: Record<string, { bg: string; border: string; text: string; r
   cyan: { bg: "bg-cyan-500/10", border: "border-cyan-500/30", text: "text-cyan-400", ring: "ring-cyan-500/50" },
 }
 
-export default function PartnersPage() {
+function PartnersPageContent() {
   const searchParams = useSearchParams()
   const [selectedType, setSelectedType] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -537,5 +537,20 @@ export default function PartnersPage() {
         </div>
       </section>
     </main>
+  )
+}
+
+export default function PartnersPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-background flex items-center justify-center p-6">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="font-mono text-sm text-muted-foreground">Loading...</p>
+        </div>
+      </main>
+    }>
+      <PartnersPageContent />
+    </Suspense>
   )
 }

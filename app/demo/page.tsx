@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
@@ -59,7 +59,7 @@ const hearAboutUsOptions = [
   { value: "other", label: "Other" },
 ]
 
-export default function DemoPage() {
+function DemoPageContent() {
   const searchParams = useSearchParams()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -497,5 +497,20 @@ export default function DemoPage() {
         </div>
       </div>
     </main>
+  )
+}
+
+export default function DemoPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-background flex items-center justify-center p-6">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="font-mono text-sm text-muted-foreground">Loading...</p>
+        </div>
+      </main>
+    }>
+      <DemoPageContent />
+    </Suspense>
   )
 }
