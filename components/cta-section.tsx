@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef, useEffect } from "react"
+import Link from "next/link"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 
@@ -80,7 +81,7 @@ export function CTASection() {
         
         {/* CTA buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-          <a
+          <Link
             href="/demo"
             className="group inline-flex items-center gap-3 bg-accent text-black font-mono text-sm font-bold px-8 py-4 rounded-lg hover:bg-accent/90 transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-accent/25"
           >
@@ -88,9 +89,9 @@ export function CTASection() {
             <svg className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-          </a>
+          </Link>
           
-          <a
+          <Link
             href="/demo?type=pilot"
             className="group inline-flex items-center gap-3 bg-transparent text-foreground font-mono text-sm font-bold px-8 py-4 rounded-lg border border-foreground/20 hover:border-accent hover:text-accent transition-all duration-200 hover:scale-105"
           >
@@ -98,7 +99,7 @@ export function CTASection() {
             <svg className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
-          </a>
+          </Link>
         </div>
         
         {/* Trust indicators */}
@@ -153,18 +154,18 @@ export function CTASection() {
             </p>
           </div>
           <div className="flex items-center gap-6">
-            <a href="/partners" className="font-mono text-xs text-muted-foreground hover:text-accent transition-colors">
+            <Link href="/partners" className="font-mono text-xs text-muted-foreground hover:text-accent transition-colors">
               Partners
-            </a>
+            </Link>
             <a href="#" className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">
               Privacy
             </a>
             <a href="#" className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">
               Terms
             </a>
-            <a href="/demo" className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">
+            <Link href="/demo" className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">
               Contact
-            </a>
+            </Link>
           </div>
           <p className="font-mono text-[10px] text-muted-foreground">
             © 2025 MRO.ai. All rights reserved.
