@@ -102,7 +102,7 @@ export function CTASection() {
         </div>
         
         {/* Trust indicators */}
-        <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10 text-muted-foreground">
+        <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10 text-muted-foreground mb-12">
           <div className="flex items-center gap-2">
             <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -122,6 +122,25 @@ export function CTASection() {
             <span className="font-mono text-xs">Your vendors, your workflow</span>
           </div>
         </div>
+
+        {/* Partner callout */}
+        <div className="border-t border-border/20 pt-8">
+          <a
+            href="/partners"
+            className="group inline-flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-muted-foreground hover:text-accent transition-colors"
+          >
+            <span className="text-2xl">🤝</span>
+            <span className="font-mono text-sm text-center sm:text-left">
+              <span className="text-foreground group-hover:text-accent transition-colors">Interested in partnering?</span>
+              <br className="sm:hidden" />
+              <span className="hidden sm:inline"> — </span>
+              <span className="text-muted-foreground group-hover:text-accent/80">Become a reseller or technology partner</span>
+            </span>
+            <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </a>
+        </div>
       </div>
       
       {/* Footer */}
@@ -134,13 +153,16 @@ export function CTASection() {
             </p>
           </div>
           <div className="flex items-center gap-6">
+            <a href="/partners" className="font-mono text-xs text-muted-foreground hover:text-accent transition-colors">
+              Partners
+            </a>
             <a href="#" className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">
               Privacy
             </a>
             <a href="#" className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">
               Terms
             </a>
-            <a href="#" className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">
+            <a href="/demo" className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">
               Contact
             </a>
           </div>
