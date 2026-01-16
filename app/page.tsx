@@ -27,9 +27,9 @@ export default function Page() {
         
         {/* Act 2: How It Works */}
         <WorkSection />
+        <PrinciplesSection />
         <SignalsSection />
         <FloorAgentSection />
-        <PrinciplesSection />
         
         {/* Act 3: Capabilities */}
         <InventorySection />

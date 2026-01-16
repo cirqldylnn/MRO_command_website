@@ -9,9 +9,9 @@ const navItems = [
   { id: "problem", label: "Problem" },
   // Act 2: How It Works
   { id: "work", label: "Process" },
+  { id: "principles", label: "Trust" },
   { id: "signals", label: "Request" },
   { id: "agent", label: "Agent" },
-  { id: "principles", label: "Trust" },
   // Act 3: Capabilities
   { id: "inventory", label: "Inventory" },
   { id: "projects", label: "Projects" },
