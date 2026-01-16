@@ -11,12 +11,21 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 gsap.registerPlugin(ScrollTrigger)
 
 const heroTexts = [
-  { text: "FIX ISSUES", duration: 5500 },      // 10 chars - medium
-  { text: "TRACK PARTS", duration: 6000 },     // 11 chars - medium
-  { text: "SEND RFQ", duration: 5000 },        // 8 chars - short
-  { text: "GET QUOTES", duration: 5500 },       // 10 chars - medium
-  { text: "CLOSE ORDERS", duration: 6000 },    // 12 chars - medium
+  { text: "FIX ISSUES", baseDuration: 5500 },      // 10 chars - medium
+  { text: "TRACK PARTS", baseDuration: 6000 },     // 11 chars - medium
+  { text: "SEND RFQ", baseDuration: 5000 },        // 8 chars - short
+  { text: "GET QUOTES", baseDuration: 5500 },       // 10 chars - medium
+  { text: "CLOSE ORDERS", baseDuration: 6000 },    // 12 chars - medium
 ]
+
+// Estimate animation time based on text length (roughly 150-200ms per character)
+// Then add 1.5 seconds reading time after animation completes
+function getDisplayDuration(text: string, baseDuration: number): number {
+  const textLength = text.length
+  const estimatedAnimationTime = Math.max(1500, textLength * 150) // At least 1.5s, or 150ms per char
+  const readingTimeAfterAnimation = 1500 // 1.5 seconds to read after animation completes
+  return estimatedAnimationTime + readingTimeAfterAnimation
+}
 
 export function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -24,15 +33,16 @@ export function HeroSection() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [cycleKey, setCycleKey] = useState(0)
 
-  // Cycle through texts
+  // Cycle through texts with delay after animation completes
   useEffect(() => {
     const currentText = heroTexts[currentIndex]
+    const displayDuration = getDisplayDuration(currentText.text, currentText.baseDuration)
     
     const timer = setTimeout(() => {
       const nextIndex = (currentIndex + 1) % heroTexts.length
       setCurrentIndex(nextIndex)
       setCycleKey(prev => prev + 1)
-    }, currentText.duration)
+    }, displayDuration)
 
     return () => clearTimeout(timer)
   }, [currentIndex])
