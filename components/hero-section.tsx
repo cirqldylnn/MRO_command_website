@@ -11,9 +11,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 gsap.registerPlugin(ScrollTrigger)
 
 const heroTexts = [
-  { text: "FIX MACHINES", duration: 4500 },
-  { text: "TRACK PARTS", duration: 4500 },
-  { text: "MANAGE PROJECTS", duration: 4500 },
+  { text: "FIX ISSUES", duration: 4000 },      // 10 chars - medium
+  { text: "TRACK PARTS", duration: 4500 },     // 11 chars - medium
+  { text: "SEND RFQ", duration: 3500 },        // 8 chars - short
+  { text: "GET QUOTES", duration: 4000 },       // 10 chars - medium
+  { text: "CLOSE ORDERS", duration: 4500 },    // 12 chars - medium
 ]
 
 export function HeroSection() {
@@ -90,10 +92,10 @@ export function HeroSection() {
         </div>
 
         <SplitFlapAudioProvider>
-          <div className="relative">
+          <div className="relative w-full">
             {/* Cycling split-flap text - with overflow protection for mobile */}
-            <div className="overflow-x-hidden -mx-2 px-2">
-              <div key={cycleKey} className="inline-block">
+            <div className="overflow-x-hidden -mx-2 px-2 md:-mx-4 md:px-4">
+              <div key={cycleKey} className="inline-block min-w-0">
                 <SplitFlapText text={heroTexts[currentIndex].text} speed={70} />
               </div>
             </div>
