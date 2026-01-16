@@ -18,13 +18,42 @@ const heroTexts = [
   { text: "CLOSE ORDERS", baseDuration: 6000 },    // 12 chars - medium
 ]
 
-// Estimate animation time based on text length (roughly 150-200ms per character)
-// Then add 1.5 seconds reading time after animation completes
+// Calculate actual animation time based on the split-flap animation logic
+// Accounts for staggered start delays and flip iterations per character
 function getDisplayDuration(text: string, baseDuration: number): number {
-  const textLength = text.length
-  const estimatedAnimationTime = Math.max(1500, textLength * 150) // At least 1.5s, or 150ms per char
-  const readingTimeAfterAnimation = 1500 // 1.5 seconds to read after animation completes
-  return estimatedAnimationTime + readingTimeAfterAnimation
+  const speed = 70 // Must match the speed prop passed to SplitFlapText
+  const tileDelayMultiplier = 800 // First cycle uses 800, subsequent use 400
+  const baseFlips = 8
+  
+  // Filter out spaces - they don't animate
+  const chars = text.replace(/ /g, '').split('')
+  const textLength = chars.length
+  
+  if (textLength === 0) {
+    return 1500 + 1500 // Minimum time even for empty text
+  }
+  
+  // Find the last character's total animation time
+  // Last character is at index textLength - 1
+  const lastIndex = textLength - 1
+  
+  // Start delay for the last character
+  const tileDelay = 0.15 * lastIndex
+  const startDelay = tileDelay * tileDelayMultiplier
+  
+  // Number of flips needed for the last character to settle
+  const settleThreshold = baseFlips + lastIndex * 3
+  
+  // Animation time after start delay
+  const animationTime = settleThreshold * speed
+  
+  // Total time for animation to complete
+  const totalAnimationTime = startDelay + animationTime
+  
+  // Add reading time after animation completes
+  const readingTimeAfterAnimation = 1500
+  
+  return totalAnimationTime + readingTimeAfterAnimation
 }
 
 export function HeroSection() {
