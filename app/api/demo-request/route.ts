@@ -2,9 +2,6 @@ import { NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
 import OpenAI from "openai"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-
 // Types
 interface FormData {
   fullName: string
@@ -50,6 +47,7 @@ async function analyzeLeadWithAI(data: FormData): Promise<AIAnalysis | null> {
     return null
   }
 
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
   const domain = data.email.split('@')[1]
 
   const prompt = `You are a sales intelligence assistant for MRO Command, an AI-powered MRO (Maintenance, Repair, and Operations) procurement SaaS platform. Analyze this lead and provide insights.
@@ -222,6 +220,7 @@ export async function POST(request: NextRequest) {
       })
     }
 
+    const resend = new Resend(process.env.RESEND_API_KEY)
     const { error: emailError } = await resend.emails.send({
       from: "MRO Command <notifications@mrocommand.com>",
       to: "dylnn@mrocommand.com",
