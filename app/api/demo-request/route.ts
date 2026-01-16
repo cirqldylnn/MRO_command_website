@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { Resend } from "resend"
+import type { Resend } from "resend"
 import OpenAI from "openai"
 
 // Types
@@ -220,6 +220,7 @@ export async function POST(request: NextRequest) {
       })
     }
 
+    const { Resend } = await import("resend")
     const resend = new Resend(process.env.RESEND_API_KEY)
     const { error: emailError } = await resend.emails.send({
       from: "MRO Command <notifications@mrocommand.com>",
