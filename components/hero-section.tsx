@@ -11,11 +11,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 gsap.registerPlugin(ScrollTrigger)
 
 const heroTexts = [
-  { text: "FIX ISSUES", duration: 4000 },      // 10 chars - medium
-  { text: "TRACK PARTS", duration: 4500 },     // 11 chars - medium
-  { text: "SEND RFQ", duration: 3500 },        // 8 chars - short
-  { text: "GET QUOTES", duration: 4000 },       // 10 chars - medium
-  { text: "CLOSE ORDERS", duration: 4500 },    // 12 chars - medium
+  { text: "FIX ISSUES", duration: 5500 },      // 10 chars - medium
+  { text: "TRACK PARTS", duration: 6000 },     // 11 chars - medium
+  { text: "SEND RFQ", duration: 5000 },        // 8 chars - short
+  { text: "GET QUOTES", duration: 5500 },       // 10 chars - medium
+  { text: "CLOSE ORDERS", duration: 6000 },    // 12 chars - medium
 ]
 
 export function HeroSection() {
