@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useRef, useEffect, useMemo } from "react"
 import { cn } from "@/lib/utils"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -196,203 +196,407 @@ function VendorDashboardMockup() {
   )
 }
 
-// Before/After Illustration Component
-function BeforeAfterIllustration() {
+// Animated number component
+function AnimatedNumber({ value, prefix = "", suffix = "", decimals = 0 }: { value: number; prefix?: string; suffix?: string; decimals?: number }) {
+  const [displayValue, setDisplayValue] = useState(value)
+  const prevValue = useRef(value)
+  
+  useEffect(() => {
+    const startValue = prevValue.current
+    const endValue = value
+    const duration = 600
+    const startTime = Date.now()
+    
+    const animate = () => {
+      const elapsed = Date.now() - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3)
+      const current = startValue + (endValue - startValue) * eased
+      setDisplayValue(current)
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate)
+      }
+    }
+    
+    requestAnimationFrame(animate)
+    prevValue.current = value
+  }, [value])
+  
+  const formatted = decimals > 0 
+    ? displayValue.toFixed(decimals) 
+    : Math.round(displayValue).toLocaleString()
+  
+  return <span>{prefix}{formatted}{suffix}</span>
+}
+
+// ROI Calculator Component
+function ROICalculator() {
+  const [rfqsPerMonth, setRfqsPerMonth] = useState(50)
+  const [partsSpend, setPartsSpend] = useState(75000)
+  const [downtimeHours, setDowntimeHours] = useState(20)
+  const [showBreakdown, setShowBreakdown] = useState(false)
+  
+  // Calculate savings
+  const calculations = useMemo(() => {
+    // Procurement time savings
+    // Old way: ~4 hours per RFQ, New way: ~15 minutes
+    const hoursPerRfqSaved = 3.75 // 4 hours - 15 min
+    const procurementHoursSaved = rfqsPerMonth * hoursPerRfqSaved
+    const hourlyRate = 50 // Average loaded cost of procurement/maintenance staff
+    const procurementDollarsSaved = procurementHoursSaved * hourlyRate
+    
+    // Parts cost savings from more competitive bids
+    // Typically 10-15% savings when getting 5+ quotes vs 2
+    const bidSavingsPercent = 0.12
+    const partsCostSavings = partsSpend * bidSavingsPercent
+    
+    // Downtime reduction
+    // Faster troubleshooting at machine + faster sourcing = ~25% reduction
+    const downtimeReductionPercent = 0.25
+    const downtimeHoursSaved = downtimeHours * downtimeReductionPercent
+    const downtimeCostPerHour = 500 // Conservative estimate for industrial
+    const downtimeSavings = downtimeHoursSaved * downtimeCostPerHour
+    
+    // Inventory waste prevention
+    // Typically 3-5% of parts spend is wasted on duplicates
+    const inventoryWastePercent = 0.04
+    const inventoryWasteSavings = partsSpend * inventoryWastePercent
+    
+    // Total monthly
+    const totalMonthlySavings = procurementDollarsSaved + partsCostSavings + downtimeSavings + inventoryWasteSavings
+    
+    // Annual
+    const totalAnnualSavings = totalMonthlySavings * 12
+    
+    return {
+      procurementHoursSaved: Math.round(procurementHoursSaved),
+      procurementDollarsSaved: Math.round(procurementDollarsSaved),
+      partsCostSavings: Math.round(partsCostSavings),
+      downtimeHoursSaved: Math.round(downtimeHoursSaved * 10) / 10,
+      downtimeSavings: Math.round(downtimeSavings),
+      inventoryWasteSavings: Math.round(inventoryWasteSavings),
+      totalMonthlySavings: Math.round(totalMonthlySavings),
+      totalAnnualSavings: Math.round(totalAnnualSavings),
+    }
+  }, [rfqsPerMonth, partsSpend, downtimeHours])
+  
+  // Format large currency
+  const formatCurrency = (value: number) => {
+    if (value >= 1000000) {
+      return `$${(value / 1000000).toFixed(1)}M`
+    } else if (value >= 1000) {
+      return `$${Math.round(value / 1000)}k`
+    }
+    return `$${value}`
+  }
+
   return (
-    <div className="relative w-full mb-16">
-      <div className="grid md:grid-cols-2 gap-6">
-        {/* BEFORE Side */}
-        <div className="relative bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-lg border border-red-500/20 overflow-hidden">
-          {/* Header */}
-          <div className="px-6 py-4 border-b border-red-500/10 bg-red-500/5">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-xs uppercase tracking-[0.2em] text-red-400">
-                Before
+    <div className="relative mb-16">
+      {/* Calculator container */}
+      <div className="bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-2xl border border-accent/20 overflow-hidden">
+        {/* Header */}
+        <div className="px-6 py-5 border-b border-accent/10 bg-accent/5">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div>
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
+                Interactive ROI Calculator
               </span>
-              <span className="font-mono text-[10px] text-red-400/50">The old way</span>
+              <p className="text-sm text-zinc-400 mt-1">Adjust the sliders to see your potential savings</p>
             </div>
-          </div>
-          
-          {/* Content */}
-          <div className="p-6">
-            {/* Chaos visualization */}
-            <div className="relative h-64 flex flex-col items-center justify-center">
-              {/* Central chaos icon */}
-              <div className="relative mb-6">
-                <div className="w-20 h-20 rounded-full bg-red-500/10 border-2 border-red-500/30 flex items-center justify-center">
-                  <svg className="w-10 h-10 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                  </svg>
-                </div>
-                {/* Floating chaos elements */}
-                <div className="absolute -top-2 -right-4 w-8 h-10 bg-red-900/40 rounded border border-red-700/40 flex items-center justify-center transform rotate-12">
-                  <span className="text-[9px] font-bold text-red-400">PDF</span>
-                </div>
-                <div className="absolute -bottom-1 -left-6 w-10 h-8 bg-yellow-500/20 rounded border border-yellow-500/30 transform -rotate-6 flex items-center justify-center">
-                  <span className="text-[8px] text-yellow-400">???</span>
-                </div>
-                <div className="absolute top-0 -left-3 text-xl text-red-400/60 font-bold">?</div>
-                <div className="absolute -bottom-2 right-0 text-lg text-red-400/40 font-bold">?</div>
-              </div>
-              
-              {/* Pain points */}
-              <div className="space-y-3 w-full max-w-xs">
-                <div className="flex items-center gap-3 bg-red-500/5 rounded-lg px-4 py-3 border border-red-500/10">
-                  <div className="w-6 h-6 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0">
-                    <span className="text-red-400 text-sm">✗</span>
-                  </div>
-                  <div>
-                    <div className="text-sm text-zinc-300">Lost in email threads</div>
-                    <div className="text-xs text-zinc-500">Scattered across 47 messages</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-3 bg-red-500/5 rounded-lg px-4 py-3 border border-red-500/10">
-                  <div className="w-6 h-6 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0">
-                    <span className="text-red-400 text-sm">✗</span>
-                  </div>
-                  <div>
-                    <div className="text-sm text-zinc-300">Missing critical data</div>
-                    <div className="text-xs text-zinc-500">Lead times, freight, terms</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-3 bg-red-500/5 rounded-lg px-4 py-3 border border-red-500/10">
-                  <div className="w-6 h-6 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0">
-                    <span className="text-red-400 text-sm">✗</span>
-                  </div>
-                  <div>
-                    <div className="text-sm text-zinc-300">No audit trail</div>
-                    <div className="text-xs text-zinc-500">Who approved what, when?</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Bottom stat */}
-            <div className="mt-4 pt-4 border-t border-red-500/10 text-center">
-              <div className="font-mono text-2xl text-red-400">~4 hours</div>
-              <div className="text-xs text-zinc-500 mt-1">Average time per RFQ cycle</div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+              <span className="font-mono text-xs text-accent">Live calculation</span>
             </div>
           </div>
         </div>
         
-        {/* AFTER Side */}
-        <div className="relative bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-lg border border-accent/30 overflow-hidden">
-          {/* Header */}
-          <div className="px-6 py-4 border-b border-accent/20 bg-accent/5">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-                After
-              </span>
-              <span className="font-mono text-[10px] text-accent/50">With MRO.ai</span>
-            </div>
-          </div>
-          
-          {/* Content */}
-          <div className="p-6">
-            {/* Clean workflow visualization */}
-            <div className="relative h-64 flex flex-col">
-              {/* Pipeline visualization */}
-              <div className="flex items-center justify-between mb-6 px-2">
-                <div className="flex flex-col items-center">
-                  <div className="w-12 h-12 rounded-lg bg-accent/20 border border-accent/40 flex items-center justify-center mb-2">
-                    <svg className="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                    </svg>
-                  </div>
-                  <span className="text-[10px] text-zinc-400 font-mono">RFQ</span>
+        {/* Main content */}
+        <div className="p-6 md:p-8">
+          {/* Input section */}
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8 mb-10">
+            {/* RFQs per month */}
+            <div className="space-y-3">
+              <label className="block">
+                <span className="font-mono text-xs text-zinc-400 uppercase tracking-wider">RFQs per month</span>
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="font-[var(--font-bebas)] text-4xl text-accent">{rfqsPerMonth}</span>
+                  <span className="font-mono text-xs text-zinc-500">requests</span>
                 </div>
-                
-                <svg className="w-6 h-6 text-accent/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-                
-                <div className="flex flex-col items-center">
-                  <div className="w-12 h-12 rounded-lg bg-accent/20 border border-accent/40 flex items-center justify-center mb-2">
-                    <svg className="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
-                    </svg>
-                  </div>
-                  <span className="text-[10px] text-zinc-400 font-mono">VENDORS</span>
-                </div>
-                
-                <svg className="w-6 h-6 text-accent/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-                
-                <div className="flex flex-col items-center">
-                  <div className="w-12 h-12 rounded-lg bg-accent/20 border border-accent/40 flex items-center justify-center mb-2">
-                    <svg className="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
-                    </svg>
-                  </div>
-                  <span className="text-[10px] text-zinc-400 font-mono">COMPARE</span>
-                </div>
-                
-                <svg className="w-6 h-6 text-accent/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-                
-                <div className="flex flex-col items-center">
-                  <div className="w-12 h-12 rounded-lg bg-accent border border-accent flex items-center justify-center mb-2">
-                    <svg className="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <span className="text-[10px] text-zinc-400 font-mono">AWARD</span>
-                </div>
-              </div>
-              
-              {/* Benefits */}
-              <div className="space-y-3 flex-1">
-                <div className="flex items-center gap-3 bg-accent/5 rounded-lg px-4 py-3 border border-accent/10">
-                  <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
-                    <span className="text-accent text-sm">✓</span>
-                  </div>
-                  <div>
-                    <div className="text-sm text-zinc-300">Structured & searchable</div>
-                    <div className="text-xs text-zinc-500">Every RFQ normalized automatically</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-3 bg-accent/5 rounded-lg px-4 py-3 border border-accent/10">
-                  <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
-                    <span className="text-accent text-sm">✓</span>
-                  </div>
-                  <div>
-                    <div className="text-sm text-zinc-300">Real-time vendor tracking</div>
-                    <div className="text-xs text-zinc-500">See who responded, who's pending</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-3 bg-accent/5 rounded-lg px-4 py-3 border border-accent/10">
-                  <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
-                    <span className="text-accent text-sm">✓</span>
-                  </div>
-                  <div>
-                    <div className="text-sm text-zinc-300">Complete audit trail</div>
-                    <div className="text-xs text-zinc-500">Full history, compliance ready</div>
-                  </div>
-                </div>
+              </label>
+              <input
+                type="range"
+                min="10"
+                max="300"
+                step="5"
+                value={rfqsPerMonth}
+                onChange={(e) => setRfqsPerMonth(Number(e.target.value))}
+                className="w-full h-2 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-accent [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-accent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:cursor-pointer"
+              />
+              <div className="flex justify-between text-[10px] font-mono text-zinc-600">
+                <span>10</span>
+                <span>300</span>
               </div>
             </div>
             
-            {/* Bottom stat */}
-            <div className="mt-4 pt-4 border-t border-accent/10 text-center">
-              <div className="font-mono text-2xl text-accent">~15 minutes</div>
-              <div className="text-xs text-zinc-500 mt-1">Average time per RFQ cycle</div>
+            {/* Monthly parts spend */}
+            <div className="space-y-3">
+              <label className="block">
+                <span className="font-mono text-xs text-zinc-400 uppercase tracking-wider">Monthly parts spend</span>
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="font-[var(--font-bebas)] text-4xl text-accent">${(partsSpend / 1000).toFixed(0)}k</span>
+                </div>
+              </label>
+              <input
+                type="range"
+                min="10000"
+                max="500000"
+                step="5000"
+                value={partsSpend}
+                onChange={(e) => setPartsSpend(Number(e.target.value))}
+                className="w-full h-2 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-accent [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-accent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:cursor-pointer"
+              />
+              <div className="flex justify-between text-[10px] font-mono text-zinc-600">
+                <span>$10k</span>
+                <span>$500k</span>
+              </div>
+            </div>
+            
+            {/* Downtime hours */}
+            <div className="space-y-3">
+              <label className="block">
+                <span className="font-mono text-xs text-zinc-400 uppercase tracking-wider">Downtime hrs/month</span>
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="font-[var(--font-bebas)] text-4xl text-accent">{downtimeHours}</span>
+                  <span className="font-mono text-xs text-zinc-500">hours</span>
+                </div>
+              </label>
+              <input
+                type="range"
+                min="5"
+                max="100"
+                step="5"
+                value={downtimeHours}
+                onChange={(e) => setDowntimeHours(Number(e.target.value))}
+                className="w-full h-2 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-accent [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-accent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:cursor-pointer"
+              />
+              <div className="flex justify-between text-[10px] font-mono text-zinc-600">
+                <span>5</span>
+                <span>100</span>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      
-      {/* Center arrow for mobile */}
-      <div className="flex md:hidden justify-center -my-3 relative z-10">
-        <div className="w-10 h-10 rounded-full bg-zinc-900 border border-accent/50 flex items-center justify-center rotate-90">
-          <svg className="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-          </svg>
+          
+          {/* Output cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            {/* Procurement time */}
+            <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 hover:border-accent/30 transition-colors">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <span className="font-mono text-[10px] text-zinc-500 uppercase">Procurement</span>
+              </div>
+              <div className="font-[var(--font-bebas)] text-3xl text-accent mb-1">
+                <AnimatedNumber value={calculations.procurementHoursSaved} suffix=" hrs" />
+              </div>
+              <div className="font-mono text-xs text-zinc-500">saved/month</div>
+              <div className="mt-2 pt-2 border-t border-zinc-800">
+                <span className="font-mono text-sm text-zinc-400">
+                  <AnimatedNumber value={calculations.procurementDollarsSaved} prefix="$" />/mo
+                </span>
+              </div>
+            </div>
+            
+            {/* Parts cost savings */}
+            <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 hover:border-emerald-500/30 transition-colors">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <span className="font-mono text-[10px] text-zinc-500 uppercase">Parts Costs</span>
+              </div>
+              <div className="font-[var(--font-bebas)] text-3xl text-emerald-400 mb-1">
+                <AnimatedNumber value={calculations.partsCostSavings} prefix="$" />
+              </div>
+              <div className="font-mono text-xs text-zinc-500">saved/month</div>
+              <div className="mt-2 pt-2 border-t border-zinc-800">
+                <span className="font-mono text-[10px] text-emerald-400/70">12% avg from more bids</span>
+              </div>
+            </div>
+            
+            {/* Downtime avoided */}
+            <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 hover:border-cyan-500/30 transition-colors">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <span className="font-mono text-[10px] text-zinc-500 uppercase">Downtime</span>
+              </div>
+              <div className="font-[var(--font-bebas)] text-3xl text-cyan-400 mb-1">
+                <AnimatedNumber value={calculations.downtimeHoursSaved} decimals={1} suffix=" hrs" />
+              </div>
+              <div className="font-mono text-xs text-zinc-500">avoided/month</div>
+              <div className="mt-2 pt-2 border-t border-zinc-800">
+                <span className="font-mono text-sm text-zinc-400">
+                  <AnimatedNumber value={calculations.downtimeSavings} prefix="$" />/mo
+                </span>
+              </div>
+            </div>
+            
+            {/* Inventory waste */}
+            <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 hover:border-violet-500/30 transition-colors">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  </svg>
+                </div>
+                <span className="font-mono text-[10px] text-zinc-500 uppercase">Inventory</span>
+              </div>
+              <div className="font-[var(--font-bebas)] text-3xl text-violet-400 mb-1">
+                <AnimatedNumber value={calculations.inventoryWasteSavings} prefix="$" />
+              </div>
+              <div className="font-mono text-xs text-zinc-500">waste prevented</div>
+              <div className="mt-2 pt-2 border-t border-zinc-800">
+                <span className="font-mono text-[10px] text-violet-400/70">No duplicate orders</span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Total impact */}
+          <div className="bg-gradient-to-r from-accent/10 via-accent/5 to-transparent border border-accent/30 rounded-xl p-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div>
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">Total Annual Impact</span>
+                <div className="mt-2 font-[var(--font-bebas)] text-5xl md:text-6xl text-accent">
+                  <AnimatedNumber value={calculations.totalAnnualSavings} prefix="$" />
+                </div>
+                <div className="mt-1 font-mono text-sm text-zinc-400">
+                  <AnimatedNumber value={calculations.totalMonthlySavings} prefix="$" />/month
+                </div>
+              </div>
+              
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2 text-sm">
+                  <div className="w-3 h-3 rounded-full bg-accent" />
+                  <span className="text-zinc-400">That's</span>
+                  <span className="font-mono text-accent font-bold">
+                    {Math.round((calculations.procurementHoursSaved * 12) / 40)} weeks
+                  </span>
+                  <span className="text-zinc-400">of labor back per year</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <div className="w-3 h-3 rounded-full bg-emerald-500" />
+                  <span className="text-zinc-400">Plus</span>
+                  <span className="font-mono text-emerald-400 font-bold">
+                    {formatCurrency(calculations.partsCostSavings * 12)}
+                  </span>
+                  <span className="text-zinc-400">in competitive pricing</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Expandable breakdown */}
+          <div className="mt-6">
+            <button
+              onClick={() => setShowBreakdown(!showBreakdown)}
+              className="flex items-center gap-2 font-mono text-xs text-zinc-500 hover:text-accent transition-colors"
+            >
+              <svg
+                className={cn("w-4 h-4 transition-transform", showBreakdown && "rotate-180")}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+              {showBreakdown ? "Hide" : "Show"} detailed breakdown
+            </button>
+            
+            {showBreakdown && (
+              <div className="mt-4 grid md:grid-cols-2 gap-6 p-4 bg-zinc-900/30 rounded-xl border border-zinc-800">
+                {/* Where procurement savings come from */}
+                <div>
+                  <h4 className="font-mono text-xs uppercase tracking-wider text-accent mb-3">
+                    Where Procurement Time Goes (Old Way)
+                  </h4>
+                  <div className="space-y-2">
+                    {[
+                      { step: "Request intake & parsing", before: "45 min", after: "2 min", saved: "43 min" },
+                      { step: "RFQ creation & structuring", before: "30 min", after: "0 min", saved: "30 min" },
+                      { step: "Vendor outreach", before: "25 min", after: "0 min", saved: "25 min" },
+                      { step: "Quote parsing & normalization", before: "40 min", after: "3 min", saved: "37 min" },
+                      { step: "Comparison & decision", before: "30 min", after: "5 min", saved: "25 min" },
+                      { step: "Approval & ordering", before: "20 min", after: "5 min", saved: "15 min" },
+                    ].map((item, i) => (
+                      <div key={i} className="flex items-center justify-between text-xs">
+                        <span className="text-zinc-400">{item.step}</span>
+                        <div className="flex items-center gap-4">
+                          <span className="font-mono text-red-400/70 line-through">{item.before}</span>
+                          <span className="font-mono text-accent">{item.after}</span>
+                        </div>
+                      </div>
+                    ))}
+                    <div className="pt-2 border-t border-zinc-700 flex items-center justify-between text-sm font-bold">
+                      <span className="text-zinc-300">Total per RFQ</span>
+                      <div className="flex items-center gap-4">
+                        <span className="font-mono text-red-400 line-through">~4 hrs</span>
+                        <span className="font-mono text-accent">~15 min</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Other savings sources */}
+                <div>
+                  <h4 className="font-mono text-xs uppercase tracking-wider text-emerald-400 mb-3">
+                    Additional Value Sources
+                  </h4>
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3 p-3 bg-emerald-500/5 rounded-lg border border-emerald-500/20">
+                      <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-emerald-400 text-xs">$</span>
+                      </div>
+                      <div>
+                        <div className="text-sm text-zinc-300 font-medium">More Competitive Bids</div>
+                        <div className="text-xs text-zinc-500 mt-0.5">Easy to send RFQs to 5+ vendors instead of your usual 2. More competition = better prices (typically 10-15% savings).</div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-3 p-3 bg-cyan-500/5 rounded-lg border border-cyan-500/20">
+                      <div className="w-6 h-6 rounded-full bg-cyan-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-cyan-400 text-xs">⚡</span>
+                      </div>
+                      <div>
+                        <div className="text-sm text-zinc-300 font-medium">Floor Troubleshooting</div>
+                        <div className="text-xs text-zinc-500 mt-0.5">AI agent at each machine helps diagnose issues on the spot. Faster diagnosis + instant sourcing = machines run sooner.</div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-3 p-3 bg-violet-500/5 rounded-lg border border-violet-500/20">
+                      <div className="w-6 h-6 rounded-full bg-violet-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-violet-400 text-xs">📦</span>
+                      </div>
+                      <div>
+                        <div className="text-sm text-zinc-300 font-medium">Inventory Intelligence</div>
+                        <div className="text-xs text-zinc-500 mt-0.5">Know what you have before you order. No more duplicate purchases or emergency orders for parts already in stock.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -403,7 +607,7 @@ export function WorkSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const headerRef = useRef<HTMLDivElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
-  const illustrationRef = useRef<HTMLDivElement>(null)
+  const calculatorRef = useRef<HTMLDivElement>(null)
   const featuredRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -427,10 +631,10 @@ export function WorkSection() {
         },
       )
 
-      // Illustration fade in
-      if (illustrationRef.current) {
+      // Calculator fade in
+      if (calculatorRef.current) {
         gsap.fromTo(
-          illustrationRef.current,
+          calculatorRef.current,
           { y: 40, opacity: 0 },
           {
             y: 0,
@@ -438,7 +642,7 @@ export function WorkSection() {
             duration: 1,
             ease: "power3.out",
             scrollTrigger: {
-              trigger: illustrationRef.current,
+              trigger: calculatorRef.current,
               start: "top 90%",
               toggleActions: "play none none reverse",
             },
@@ -494,18 +698,24 @@ export function WorkSection() {
     <section ref={sectionRef} id="work" className="relative py-32 pl-6 md:pl-28 pr-6 md:pr-12">
       {/* Section header */}
       <div ref={headerRef} className="mb-12">
-        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">02 / The Modules</span>
+        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">02 / Your ROI</span>
         <h2 className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight">
-          THE SYSTEM, NOT JUST THE SCREEN.
+          THE SAVINGS ADD UP EVERYWHERE.
         </h2>
         <p className="mt-6 font-mono text-sm text-muted-foreground leading-relaxed max-w-2xl">
-          Requests in. Quotes out. Full audit trail. <span className="text-accent">Vendor performance over time.</span>
+          Not just faster quotes — lower parts costs, less downtime, zero wasted orders. 
+          <span className="text-accent"> See what you're leaving on the table.</span>
         </p>
       </div>
 
-      {/* Before/After Illustration */}
-      <div ref={illustrationRef}>
-        <BeforeAfterIllustration />
+      {/* ROI Calculator */}
+      <div ref={calculatorRef}>
+        <ROICalculator />
+      </div>
+
+      {/* How it works label */}
+      <div className="mb-8">
+        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-zinc-500">The Modules That Make It Happen</span>
       </div>
 
       {/* Module cards grid - 6 regular modules */}
