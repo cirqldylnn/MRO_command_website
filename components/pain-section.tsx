@@ -197,35 +197,37 @@ export function PainSection() {
         </div>
 
         {/* Pain Point Cards - 2x3 grid */}
-        <div ref={cardsRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div ref={cardsRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {painPoints.map((pain, index) => {
             const IconComponent = painIcons[pain.icon]
             return (
               <div
                 key={pain.icon}
-                className="group relative border border-red-500/10 bg-red-500/[0.02] p-6 hover:border-red-500/30 hover:bg-red-500/5 transition-all duration-300"
+                className="group relative border border-red-500/10 bg-red-500/[0.02] p-8 hover:border-red-500/30 hover:bg-red-500/5 transition-all duration-300 rounded-lg"
               >
                 {/* Number badge */}
-                <div className="absolute top-4 right-4 font-mono text-[10px] text-red-500/30">
+                <div className="absolute top-6 right-6 font-mono text-xs text-red-500/40">
                   0{index + 1}
                 </div>
                 
-                <div className="w-12 h-12 rounded-sm bg-red-500/10 flex items-center justify-center text-red-400 mb-4 group-hover:bg-red-500/20 transition-colors">
-                  <IconComponent />
+                <div className="w-14 h-14 rounded-lg bg-red-500/10 flex items-center justify-center text-red-400 mb-5 group-hover:bg-red-500/20 transition-colors">
+                  <div className="scale-110">
+                    <IconComponent />
+                  </div>
                 </div>
                 
-                <h3 className="font-mono text-sm text-foreground font-medium mb-2">
+                <h3 className="font-mono text-base text-foreground font-medium mb-3">
                   {pain.title}
                 </h3>
                 
-                <p className="font-mono text-xs text-muted-foreground leading-relaxed mb-3">
+                <p className="font-mono text-sm text-muted-foreground leading-relaxed mb-4">
                   {pain.description}
                 </p>
                 
                 {/* Feature tag */}
-                <div className="inline-flex items-center gap-1.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent/60" />
-                  <span className="font-mono text-[9px] uppercase tracking-wider text-accent/60">
+                <div className="inline-flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-accent/60" />
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-accent/60">
                     We fix this → {pain.connectsTo}
                   </span>
                 </div>
@@ -235,22 +237,22 @@ export function PainSection() {
         </div>
         
         {/* Bottom CTA */}
-        <div className="mt-8 p-6 border border-accent/30 bg-accent/5 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div className="mt-8 p-8 border border-accent/30 bg-accent/5 flex flex-col md:flex-row md:items-center md:justify-between gap-6 rounded-lg">
           <div>
-            <div className="font-[var(--font-bebas)] text-2xl text-accent tracking-wide mb-2">
+            <div className="font-[var(--font-bebas)] text-3xl text-accent tracking-wide mb-3">
               There's a better way.
             </div>
-            <p className="font-mono text-xs text-muted-foreground max-w-lg">
+            <p className="font-mono text-sm text-muted-foreground max-w-lg leading-relaxed">
               What if every request — photo, text, email — became a structured RFQ automatically? 
               What if you knew what parts you had? What if more vendors saw your RFQs?
             </p>
           </div>
           <a 
             href="#work" 
-            className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-accent hover:text-accent/80 transition-colors whitespace-nowrap"
+            className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-accent hover:text-accent/80 transition-colors whitespace-nowrap"
           >
             See the ROI
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
             </svg>
           </a>
