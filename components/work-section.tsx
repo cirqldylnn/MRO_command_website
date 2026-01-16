@@ -7,190 +7,248 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 
 gsap.registerPlugin(ScrollTrigger)
 
-const modules = [
+// Feature capabilities that drive the ROI
+const capabilities = [
   {
-    title: "RFQ Builder Agent",
-    description: "Clarifies specs, normalizes requests, prevents back-and-forth.",
+    title: "Multi-Channel Intake",
+    description: "Text, email, photo, kiosk — any way they want to request",
+    icon: "channels",
+    roiCategory: "procurement",
+    color: "accent",
+    link: "#signals",
+  },
+  {
+    title: "Smart RFQ Builder",
+    description: "AI structures messy requests into clean, complete RFQs",
     icon: "builder",
-    features: ["AI asks missing questions", "Part number research", "Spec normalization"],
-    highlight: false,
+    roiCategory: "procurement",
+    color: "accent",
+    link: "#signals",
   },
   {
-    title: "Vendor Matching",
-    description: "Preferred vendors first, category fit, response-time scoring.",
-    icon: "matching",
-    features: ["Category-based matching", "Preferred vendor priority", "Response history"],
-    highlight: false,
+    title: "Floor Agent",
+    description: "QR scan → troubleshoot → source, right at the machine",
+    icon: "floor",
+    roiCategory: "downtime",
+    color: "cyan",
+    link: "#agent",
   },
   {
-    title: "Automated Outreach",
-    description: "Sends clean RFQs, chases responses, escalates when critical.",
-    icon: "outreach",
-    features: ["Auto follow-ups", "Escalation rules", "Multi-vendor sends"],
-    highlight: false,
+    title: "Inventory Intelligence",
+    description: "Know what you have before you order. AI-powered tracking",
+    icon: "inventory",
+    roiCategory: "inventory",
+    color: "violet",
+    link: "#inventory",
   },
   {
-    title: "Quote Parsing",
-    description: "Reads email/PDF quotes → extracts price, lead time, freight, terms.",
-    icon: "parsing",
-    features: ["PDF extraction", "Email parsing", "Image OCR"],
-    highlight: false,
+    title: "Project Mode",
+    description: "Multi-phase projects with budget tracking and phase management",
+    icon: "project",
+    roiCategory: "procurement",
+    color: "accent",
+    link: "#projects",
   },
   {
-    title: "Quote Compare + Award",
-    description: "Side-by-side comparison with confidence scoring.",
-    icon: "compare",
-    features: ["Normalized comparison", "One-click award", "PO generation"],
-    highlight: false,
+    title: "Competitive Bidding",
+    description: "Auto-send to 5+ vendors. More bids = better prices",
+    icon: "bidding",
+    roiCategory: "parts",
+    color: "emerald",
+    link: "#work",
   },
   {
-    title: "Live Concierge",
-    description: "One click: 'talk to a person' for complex or line-down events.",
-    icon: "concierge",
-    features: ["Instant escalation", "Human handoff", "24/7 support"],
-    highlight: false,
-  },
-  {
-    title: "Vendor Intelligence",
-    description: "Track performance over time. Know who responds fast, who delivers.",
+    title: "Vendor Analytics",
+    description: "Track response times, win rates, and performance over time",
     icon: "analytics",
-    features: ["Response time tracking", "Win rate analytics", "Spend per vendor"],
-    highlight: true,
+    roiCategory: "parts",
+    color: "emerald",
+    link: "#work",
+  },
+  {
+    title: "Adoption Tools",
+    description: "Leaderboards, streaks, and recognition to drive team usage",
+    icon: "adoption",
+    roiCategory: "all",
+    color: "amber",
+    link: "#adoption",
   },
 ]
 
-// Module icon components
-function BuilderIcon() {
+// Capability icon components
+function ChannelsIcon({ className }: { className?: string }) {
   return (
-    <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <rect x="4" y="6" width="24" height="20" rx="2" className="stroke-current" />
-      <line x1="4" y1="12" x2="28" y2="12" className="stroke-current" />
-      <line x1="8" y1="17" x2="18" y2="17" className="stroke-muted-foreground" />
-      <line x1="8" y1="21" x2="14" y2="21" className="stroke-muted-foreground" />
-      <circle cx="23" cy="19" r="3" className="stroke-accent fill-accent/20" />
-      <path d="M22 19l1 1 2-2" className="stroke-accent" strokeWidth="1.5" />
+    <svg className={cn("w-6 h-6", className)} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M8.5 8h7M8.5 12h4" />
     </svg>
   )
 }
 
-function MatchingIcon() {
+function BuilderIcon({ className }: { className?: string }) {
   return (
-    <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <circle cx="10" cy="12" r="4" className="stroke-current" />
-      <circle cx="22" cy="12" r="4" className="stroke-current" />
-      <circle cx="16" cy="22" r="4" className="stroke-accent fill-accent/20" />
-      <line x1="12" y1="15" x2="14" y2="19" className="stroke-muted-foreground" strokeDasharray="2 2" />
-      <line x1="20" y1="15" x2="18" y2="19" className="stroke-muted-foreground" strokeDasharray="2 2" />
+    <svg className={cn("w-6 h-6", className)} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
     </svg>
   )
 }
 
-function OutreachIcon() {
+function FloorIcon({ className }: { className?: string }) {
   return (
-    <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M4 8l12 8 12-8" className="stroke-current" />
-      <rect x="4" y="8" width="24" height="16" rx="2" className="stroke-current" />
-      <circle cx="26" cy="6" r="4" className="stroke-accent fill-accent/20" />
-      <line x1="26" y1="4" x2="26" y2="6" className="stroke-accent" />
-      <line x1="26" y1="6" x2="28" y2="6" className="stroke-accent" />
+    <svg className={cn("w-6 h-6", className)} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5z" strokeOpacity="0.5" strokeDasharray="2 2" />
     </svg>
   )
 }
 
-function ParsingIcon() {
+function InventoryIcon({ className }: { className?: string }) {
   return (
-    <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <rect x="6" y="4" width="14" height="18" rx="1" className="stroke-current" />
-      <line x1="9" y1="9" x2="17" y2="9" className="stroke-muted-foreground" />
-      <line x1="9" y1="13" x2="15" y2="13" className="stroke-muted-foreground" />
-      <line x1="9" y1="17" x2="13" y2="17" className="stroke-muted-foreground" />
-      <path d="M20 14l4 4m0 0l4 4m-4-4l4-4m-4 4l-4 4" className="stroke-accent" strokeWidth="2" />
+    <svg className={cn("w-6 h-6", className)} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
     </svg>
   )
 }
 
-function CompareIcon() {
+function ProjectIcon({ className }: { className?: string }) {
   return (
-    <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <rect x="4" y="6" width="10" height="20" rx="1" className="stroke-current" />
-      <rect x="18" y="6" width="10" height="20" rx="1" className="stroke-current" />
-      <line x1="7" y1="11" x2="11" y2="11" className="stroke-muted-foreground" />
-      <line x1="7" y1="15" x2="11" y2="15" className="stroke-muted-foreground" />
-      <line x1="21" y1="11" x2="25" y2="11" className="stroke-muted-foreground" />
-      <line x1="21" y1="15" x2="25" y2="15" className="stroke-muted-foreground" />
-      <circle cx="9" cy="21" r="2" className="stroke-accent fill-accent/20" />
-      <circle cx="23" cy="21" r="2" className="stroke-muted-foreground" />
+    <svg className={cn("w-6 h-6", className)} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M6 6.878V6a2.25 2.25 0 012.25-2.25h7.5A2.25 2.25 0 0118 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 004.5 9v.878m13.5-3A2.25 2.25 0 0119.5 9v.878m0 0a2.246 2.246 0 00-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0121 12v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6c0-.98.626-1.813 1.5-2.122" />
     </svg>
   )
 }
 
-function ConciergeIcon() {
+function BiddingIcon({ className }: { className?: string }) {
   return (
-    <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <circle cx="16" cy="10" r="5" className="stroke-current" />
-      <path d="M8 26c0-4.4 3.6-8 8-8s8 3.6 8 8" className="stroke-current" />
-      <circle cx="24" cy="8" r="5" className="stroke-accent fill-accent/20" />
-      <path d="M22 8h4M24 6v4" className="stroke-accent" strokeWidth="2" />
+    <svg className={cn("w-6 h-6", className)} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
     </svg>
   )
 }
 
-function AnalyticsIcon() {
+function AnalyticsIcon({ className }: { className?: string }) {
   return (
-    <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5">
-      {/* Chart bars */}
-      <rect x="6" y="18" width="4" height="8" rx="0.5" className="stroke-current fill-current/20" />
-      <rect x="14" y="12" width="4" height="14" rx="0.5" className="stroke-accent fill-accent/30" />
-      <rect x="22" y="6" width="4" height="20" rx="0.5" className="stroke-current fill-current/20" />
-      {/* Trend line */}
-      <path d="M4 22l8-6 6 3 10-12" className="stroke-accent" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      {/* Arrow head */}
-      <path d="M26 5l2 2-4 0z" className="fill-accent stroke-accent" />
+    <svg className={cn("w-6 h-6", className)} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
     </svg>
   )
 }
 
-const moduleIcons: Record<string, () => React.ReactElement> = {
+function AdoptionIcon({ className }: { className?: string }) {
+  return (
+    <svg className={cn("w-6 h-6", className)} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0" />
+    </svg>
+  )
+}
+
+const capabilityIcons: Record<string, React.FC<{ className?: string }>> = {
+  channels: ChannelsIcon,
   builder: BuilderIcon,
-  matching: MatchingIcon,
-  outreach: OutreachIcon,
-  parsing: ParsingIcon,
-  compare: CompareIcon,
-  concierge: ConciergeIcon,
+  floor: FloorIcon,
+  inventory: InventoryIcon,
+  project: ProjectIcon,
+  bidding: BiddingIcon,
   analytics: AnalyticsIcon,
+  adoption: AdoptionIcon,
 }
 
-// Vendor Intelligence Dashboard Mockup
-function VendorDashboardMockup() {
+const colorClasses: Record<string, { bg: string; border: string; text: string; icon: string }> = {
+  accent: { bg: "bg-accent/10", border: "border-accent/30", text: "text-accent", icon: "text-accent" },
+  cyan: { bg: "bg-cyan-500/10", border: "border-cyan-500/30", text: "text-cyan-400", icon: "text-cyan-400" },
+  violet: { bg: "bg-violet-500/10", border: "border-violet-500/30", text: "text-violet-400", icon: "text-violet-400" },
+  emerald: { bg: "bg-emerald-500/10", border: "border-emerald-500/30", text: "text-emerald-400", icon: "text-emerald-400" },
+  amber: { bg: "bg-amber-500/10", border: "border-amber-500/30", text: "text-amber-400", icon: "text-amber-400" },
+}
+
+const roiLabels: Record<string, string> = {
+  procurement: "Saves Procurement Time",
+  downtime: "Reduces Downtime",
+  inventory: "Prevents Waste",
+  parts: "Lowers Parts Cost",
+  all: "Drives Adoption",
+}
+
+// Capabilities Preview Component
+function CapabilitiesPreview() {
   return (
-    <div className="bg-zinc-950 rounded-lg border border-emerald-500/30 p-4 mt-4">
-      <div className="flex items-center gap-2 mb-3">
-        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-        <span className="font-mono text-[10px] text-emerald-400 uppercase tracking-wider">Vendor Performance</span>
+    <div className="mt-12 mb-8">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-zinc-500">What Drives These Numbers</span>
+          <p className="text-sm text-zinc-400 mt-1">Click any capability to see it in action below</p>
+        </div>
+        <div className="hidden md:flex items-center gap-2 text-xs text-zinc-500">
+          <svg className="w-4 h-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
+          <span className="font-mono">Scroll to explore</span>
+        </div>
       </div>
       
-      {/* Mini vendor stats */}
-      <div className="space-y-2">
-        {[
-          { name: "Acme Industrial", response: "2.3h avg", rate: "94%", spend: "$47k", best: true },
-          { name: "FastParts Co", response: "4.1h avg", rate: "87%", spend: "$32k", best: false },
-          { name: "Quality MRO", response: "6.8h avg", rate: "72%", spend: "$18k", best: false },
-        ].map((vendor, i) => (
-          <div key={i} className={cn(
-            "flex items-center justify-between p-2 rounded-lg text-[10px] font-mono",
-            vendor.best ? "bg-emerald-500/10 border border-emerald-500/30" : "bg-zinc-900/50"
-          )}>
-            <div className="flex items-center gap-2">
-              {vendor.best && <span className="text-emerald-400">★</span>}
-              <span className={vendor.best ? "text-emerald-400" : "text-zinc-400"}>{vendor.name}</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-zinc-500">{vendor.response}</span>
-              <span className={vendor.best ? "text-emerald-400" : "text-zinc-400"}>{vendor.rate}</span>
-              <span className="text-zinc-600">{vendor.spend}</span>
-            </div>
-          </div>
-        ))}
+      {/* Capabilities Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {capabilities.map((cap, index) => {
+          const IconComponent = capabilityIcons[cap.icon]
+          const colors = colorClasses[cap.color]
+          const roiLabel = roiLabels[cap.roiCategory]
+          
+          return (
+            <a
+              key={index}
+              href={cap.link}
+              className={cn(
+                "group relative p-4 rounded-xl border transition-all duration-300 hover:scale-[1.02]",
+                colors.border,
+                "bg-zinc-900/30 hover:bg-zinc-900/60"
+              )}
+            >
+              {/* Icon */}
+              <div className={cn(
+                "w-10 h-10 rounded-lg flex items-center justify-center mb-3 transition-colors",
+                colors.bg
+              )}>
+                <IconComponent className={colors.icon} />
+              </div>
+              
+              {/* Title */}
+              <h4 className={cn(
+                "font-mono text-sm font-medium mb-1 transition-colors",
+                "text-zinc-200 group-hover:" + colors.text.replace("text-", "text-")
+              )}>
+                {cap.title}
+              </h4>
+              
+              {/* Description */}
+              <p className="font-mono text-[11px] text-zinc-500 leading-relaxed mb-3">
+                {cap.description}
+              </p>
+              
+              {/* ROI Connection */}
+              <div className="flex items-center gap-1.5">
+                <div className={cn("w-1.5 h-1.5 rounded-full", colors.bg.replace("/10", ""))} />
+                <span className={cn("font-mono text-[9px] uppercase tracking-wider", colors.text, "opacity-70")}>
+                  {roiLabel}
+                </span>
+              </div>
+              
+              {/* Hover arrow */}
+              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                <svg className={cn("w-4 h-4", colors.icon)} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </div>
+            </a>
+          )
+        })}
+      </div>
+      
+      {/* Bottom CTA */}
+      <div className="mt-6 text-center">
+        <p className="font-mono text-xs text-zinc-500">
+          Each capability is detailed below. <span className="text-accent">Keep scrolling to see how they work.</span>
+        </p>
       </div>
     </div>
   )
@@ -606,12 +664,11 @@ function ROICalculator() {
 export function WorkSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const headerRef = useRef<HTMLDivElement>(null)
-  const gridRef = useRef<HTMLDivElement>(null)
   const calculatorRef = useRef<HTMLDivElement>(null)
-  const featuredRef = useRef<HTMLDivElement>(null)
+  const capabilitiesRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!sectionRef.current || !headerRef.current || !gridRef.current) return
+    if (!sectionRef.current || !headerRef.current) return
 
     const ctx = gsap.context(() => {
       // Header slide in from left
@@ -650,37 +707,20 @@ export function WorkSection() {
         )
       }
 
-      const cards = gridRef.current?.querySelectorAll("article")
-      if (cards && cards.length > 0) {
-        gsap.set(cards, { y: 60, opacity: 0 })
-        gsap.to(cards, {
+      // Capabilities preview fade in
+      if (capabilitiesRef.current) {
+        gsap.fromTo(
+          capabilitiesRef.current,
+          { y: 40, opacity: 0 },
+          {
           y: 0,
           opacity: 1,
-          duration: 0.8,
-          stagger: 0.1,
+            duration: 1,
           ease: "power3.out",
           scrollTrigger: {
-            trigger: gridRef.current,
+              trigger: capabilitiesRef.current,
             start: "top 90%",
             toggleActions: "play none none reverse",
-          },
-        })
-      }
-
-      // Featured card animation
-      if (featuredRef.current) {
-        gsap.fromTo(
-          featuredRef.current,
-          { y: 60, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: featuredRef.current,
-              start: "top 90%",
-              toggleActions: "play none none reverse",
             },
           },
         )
@@ -689,10 +729,6 @@ export function WorkSection() {
 
     return () => ctx.revert()
   }, [])
-
-  // Separate featured module from regular modules
-  const regularModules = modules.filter(m => !m.highlight)
-  const featuredModule = modules.find(m => m.highlight)
 
   return (
     <section ref={sectionRef} id="work" className="relative py-32 pl-6 md:pl-28 pr-6 md:pr-12">
@@ -713,240 +749,11 @@ export function WorkSection() {
         <ROICalculator />
       </div>
 
-      {/* How it works label */}
-      <div className="mb-8">
-        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-zinc-500">The Modules That Make It Happen</span>
+      {/* Capabilities Preview - What drives the ROI */}
+      <div ref={capabilitiesRef}>
+        <CapabilitiesPreview />
       </div>
-
-      {/* Module cards grid - 6 regular modules */}
-      <div
-        ref={gridRef}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8"
-      >
-        {regularModules.map((module, index) => (
-          <ModuleCard key={index} module={module} index={index} />
-        ))}
-      </div>
-
-      {/* Featured Module - Vendor Intelligence */}
-      {featuredModule && (
-        <div ref={featuredRef}>
-          <FeaturedModuleCard module={featuredModule} />
-        </div>
-      )}
     </section>
   )
 }
 
-function ModuleCard({
-  module,
-  index,
-}: {
-  module: {
-    title: string
-    description: string
-    icon: string
-    features: string[]
-    highlight: boolean
-  }
-  index: number
-}) {
-  const [isHovered, setIsHovered] = useState(false)
-  const IconComponent = moduleIcons[module.icon]
-
-  return (
-    <article
-      className={cn(
-        "group relative border border-border/40 p-6 flex flex-col transition-all duration-500 cursor-pointer overflow-hidden rounded-lg",
-        isHovered && "border-accent/60",
-      )}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {/* Background layer */}
-      <div
-        className={cn(
-          "absolute inset-0 bg-accent/5 transition-opacity duration-500",
-          isHovered ? "opacity-100" : "opacity-0",
-        )}
-      />
-
-      {/* Top accent line */}
-      <div 
-        className={cn(
-          "absolute top-0 left-0 h-px bg-accent transition-all duration-500",
-          isHovered ? "w-full" : "w-0"
-        )}
-      />
-
-      {/* Content */}
-      <div className="relative z-10">
-        {/* Icon and index */}
-        <div className="flex items-start justify-between mb-6">
-          <div className={cn(
-            "text-muted-foreground transition-colors duration-300",
-            isHovered && "text-accent"
-          )}>
-            <IconComponent />
-          </div>
-          <span className={cn(
-            "font-mono text-[10px] transition-colors duration-300",
-            isHovered ? "text-accent" : "text-muted-foreground/40"
-          )}>
-            {String(index + 1).padStart(2, "0")}
-        </span>
-        </div>
-
-        {/* Title */}
-        <h3
-          className={cn(
-            "font-[var(--font-bebas)] text-2xl tracking-tight transition-colors duration-300 mb-3",
-            isHovered ? "text-accent" : "text-foreground",
-          )}
-        >
-          {module.title}
-        </h3>
-
-        {/* Divider */}
-        <div className={cn(
-          "h-px bg-accent/60 mb-4 transition-all duration-500",
-          isHovered ? "w-full" : "w-8"
-        )} />
-
-        {/* Description */}
-        <p className="font-mono text-xs text-muted-foreground leading-relaxed mb-4">
-          {module.description}
-        </p>
-
-        {/* Feature bullets */}
-        <div className="space-y-1.5">
-          {module.features.map((feature, i) => (
-            <div key={i} className="flex items-center gap-2">
-              <div className={cn(
-                "w-1 h-1 rounded-full transition-colors duration-300",
-                isHovered ? "bg-accent" : "bg-muted-foreground/40"
-              )} />
-              <span className="font-mono text-[10px] text-muted-foreground">{feature}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Corner accent */}
-      <div
-          className={cn(
-          "absolute bottom-0 right-0 w-12 h-12 transition-all duration-500",
-          isHovered ? "opacity-100" : "opacity-0",
-        )}
-      >
-        <div className="absolute bottom-0 right-0 w-full h-[1px] bg-accent" />
-        <div className="absolute bottom-0 right-0 w-[1px] h-full bg-accent" />
-      </div>
-    </article>
-  )
-}
-
-function FeaturedModuleCard({
-  module,
-}: {
-  module: {
-    title: string
-    description: string
-    icon: string
-    features: string[]
-    highlight: boolean
-  }
-}) {
-  const [isHovered, setIsHovered] = useState(false)
-  const IconComponent = moduleIcons[module.icon]
-
-  return (
-    <article
-      className={cn(
-        "group relative border-2 border-emerald-500/30 p-6 md:p-8 transition-all duration-500 cursor-pointer overflow-hidden rounded-xl bg-gradient-to-br from-emerald-500/5 via-zinc-900/50 to-zinc-950",
-        isHovered && "border-emerald-500/60",
-      )}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {/* NEW badge */}
-      <div className="absolute top-4 right-4 md:top-6 md:right-6">
-        <div className="bg-emerald-500 text-black font-mono text-[10px] font-bold px-2 py-1 rounded">
-          NEW
-        </div>
-      </div>
-
-      {/* Top accent line */}
-      <div 
-        className={cn(
-          "absolute top-0 left-0 h-0.5 bg-gradient-to-r from-emerald-500 to-accent transition-all duration-500",
-          isHovered ? "w-full" : "w-1/3"
-        )}
-      />
-
-      <div className="grid lg:grid-cols-2 gap-8">
-        {/* Left: Content */}
-        <div>
-          {/* Icon and label */}
-          <div className="flex items-center gap-3 mb-6">
-            <div className={cn(
-              "w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center transition-colors duration-300",
-              isHovered && "bg-emerald-500/20"
-            )}>
-              <div className="text-emerald-400">
-                <IconComponent />
-              </div>
-            </div>
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-emerald-400">
-              07 / Analytics
-      </span>
-          </div>
-
-          {/* Title */}
-          <h3 className="font-[var(--font-bebas)] text-3xl md:text-4xl tracking-tight text-emerald-400 mb-4">
-            {module.title}
-          </h3>
-
-          {/* Divider */}
-          <div className={cn(
-            "h-px bg-emerald-500/40 mb-4 transition-all duration-500",
-            isHovered ? "w-full" : "w-16"
-          )} />
-
-          {/* Description */}
-          <p className="font-mono text-sm text-muted-foreground leading-relaxed mb-6">
-            {module.description}
-          </p>
-
-          {/* Feature bullets - larger */}
-          <div className="space-y-3">
-            {module.features.map((feature, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
-                  <span className="text-emerald-400 text-xs">✓</span>
-                </div>
-                <span className="font-mono text-sm text-zinc-300">{feature}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Right: Mini dashboard mockup */}
-        <div className="hidden lg:block">
-          <VendorDashboardMockup />
-        </div>
-      </div>
-
-      {/* Corner accent */}
-      <div
-        className={cn(
-          "absolute bottom-0 right-0 w-20 h-20 transition-all duration-500",
-          isHovered ? "opacity-100" : "opacity-50",
-        )}
-      >
-        <div className="absolute bottom-0 right-0 w-full h-[2px] bg-gradient-to-l from-emerald-500/60 to-transparent" />
-        <div className="absolute bottom-0 right-0 w-[2px] h-full bg-gradient-to-t from-emerald-500/60 to-transparent" />
-      </div>
-    </article>
-  )
-}
